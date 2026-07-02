@@ -1,6 +1,6 @@
 {
     "name": "pinvandaag/p-market-api-php",
-    "description": "A PHP wrapper for the p-market-api",
+    "description": "A PHP wrapper for the PAX Technology p-market-api",
     "license": "MIT",
     "type": "library",
     "require": {

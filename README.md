@@ -1,5 +1,5 @@
 ## About
-A PHP Wrapper for the <a href="https://tms-demo.ccvdev.eu/api/external/index.html">CCV - Estate Management - Terminal Management</a>
+A PHP Wrapper for the <a href="https://github.com/PAXSTORE/paxstore-openapi-java-sdk/blob/master/docs/TERMINAL_API.md">PAX Technology  p-market-api</a>
 
 ## Installation
 `composer require pinvandaag/p-market-api-php`
@@ -10,7 +10,7 @@ A PHP Wrapper for the <a href="https://tms-demo.ccvdev.eu/api/external/index.htm
 <?php
 
 use Dotenv\Dotenv;
-use PinVandaag\TmsCcvAPI\TmsCcvAPIClient;
+use PinVandaag\PMarketAPI\PMarketAPIClient;
 
 final class PMarketController
 {
