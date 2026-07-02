@@ -7,6 +7,7 @@ namespace PinVandaag\PMarketAPI\Client;
 use GuzzleHttp\ClientInterface;
 use PinVandaag\PMarketAPI\Exception\PMarketAPIException;
 use PinVandaag\PMarketAPI\Model\Terminal;
+use PinVandaag\PMarketAPI\Model\TerminalSearchResult;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Log\LoggerAwareTrait;
 use SensitiveParameter;
@@ -64,6 +65,61 @@ final class APIClient
         $this->apiSecret = $apiSecret;
 
         return $this;
+    }
+
+    /**
+     * Search terminals by page.
+     *
+    * @throws PMarketAPIException
+     */
+    public function searchTerminal(
+        int $pageNo = 1,
+        int $pageSize = 10,
+        ?string $orderBy = null,
+        ?string $status = null,
+        ?string $snNameTID = null,
+        ?string $resellerName = null,
+        ?string $merchantName = null,
+        bool $includeGeoLocation = false,
+        bool $includeInstalledApks = false,
+        bool $includeInstalledFirmware = false,
+    ): TerminalSearchResult {
+        $this->assertPage($pageNo, $pageSize);
+
+        $query = [
+            'limit' => (string) $pageSize,
+            'pageNo' => (string) $pageNo,
+        ];
+
+        if ($orderBy !== null && $orderBy !== '') {
+            $query['orderBy'] = $this->normalizeTerminalOrderBy($orderBy);
+        }
+
+        if ($resellerName !== null && $resellerName !== '') {
+            $query['resellerName'] = $resellerName;
+        }
+
+        if ($merchantName !== null && $merchantName !== '') {
+            $query['merchantName'] = $merchantName;
+        }
+
+        if ($status !== null && $status !== '') {
+            $query['status'] = $this->normalizeTerminalStatus($status);
+        }
+
+        if ($snNameTID !== null && $snNameTID !== '') {
+            $query['snNameTID'] = $snNameTID;
+        }
+
+        $query['includeGeoLocation'] = $this->boolString($includeGeoLocation);
+        $query['includeInstalledFirmware'] = $this->boolString($includeInstalledFirmware);
+        $query['includeInstalledApks'] = $this->boolString($includeInstalledApks);
+
+        return $this->getResultPage(
+            endpoint: '/v1/3rdsys/terminals',
+            actionDescription: 'search P Market terminals',
+            query: $query,
+        );
     }
 
     /**
@@ -127,6 +183,25 @@ final class APIClient
         );
 
         return $this->deserializeResultData($response, $responseClass, $actionDescription);
+    }
+
+    private function getResultPage(
+        string $endpoint,
+        string $actionDescription,
+        array $query = [],
+        array $headers = [],
+    ): TerminalSearchResult {
+        $response = $this->request(
+            method: 'GET',
+            endpoint: $endpoint,
+            query: $query,
+            options: [
+                'headers' => $this->defaultHeaders() + $headers,
+            ],
+            actionDescription: $actionDescription,
+        );
+
+        return $this->deserializeTerminalSearchResult($response, $actionDescription);
     }
 
     /**
@@ -263,6 +338,59 @@ final class APIClient
         return implode('&', $parts);
     }
 
+    private function deserializeTerminalSearchResult(
+        ResponseInterface $response,
+        string $actionDescription,
+    ): TerminalSearchResult {
+        $statusCode = $response->getStatusCode();
+        $body = (string) $response->getBody();
+
+        if ($statusCode < 200 || $statusCode >= 300) {
+            throw new PMarketAPIException(
+                $this->errorMessageFromResponseBody($body, $actionDescription, $statusCode),
+                $statusCode,
+            );
+        }
+
+        $decoded = json_decode($body, true);
+        if (!is_array($decoded)) {
+            throw new PMarketAPIException(sprintf('Could not decode P Market response for %s.', $actionDescription));
+        }
+
+        $businessCode = $decoded['businessCode'] ?? null;
+        if ($businessCode !== 0) {
+            throw new PMarketAPIException($this->resultErrorMessage($decoded, $actionDescription, $statusCode), (int) ($businessCode ?? 0));
+        }
+
+        $pageInfo = $decoded['pageInfo'] ?? $decoded;
+        if (!is_array($pageInfo)) {
+            throw new PMarketAPIException(sprintf('P Market returned empty pageInfo while trying to %s.', $actionDescription));
+        }
+
+        $dataSet = $pageInfo['dataSet'] ?? $pageInfo['dataset'] ?? [];
+        if (!is_array($dataSet)) {
+            $dataSet = [];
+        }
+
+        $terminals = [];
+        foreach ($dataSet as $terminalData) {
+            if (!is_array($terminalData)) {
+                continue;
+            }
+
+            $terminals[] = $this->serializer->denormalize($terminalData, Terminal::class);
+        }
+
+        return new TerminalSearchResult(
+            pageNo: (int) ($pageInfo['pageNo'] ?? 1),
+            limit: (int) ($pageInfo['limit'] ?? count($terminals)),
+            totalCount: isset($pageInfo['totalCount']) ? (int) $pageInfo['totalCount'] : count($terminals),
+            hasNext: (bool) ($pageInfo['hasNext'] ?? false),
+            dataSet: $terminals,
+            orderBy: isset($pageInfo['orderBy']) ? (string) $pageInfo['orderBy'] : null,
+        );
+    }
+
     /**
      * @template T of object
      *
@@ -353,6 +481,49 @@ final class APIClient
         }
 
         return (int) $value;
+    }
+
+    private function assertPage(int $pageNo, int $pageSize): void
+    {
+        $validationErrors = [];
+
+        if ($pageNo < 1) {
+            $validationErrors[] = 'pageNo:must be greater than or equal to 1';
+        }
+
+        if ($pageSize < 1) {
+            $validationErrors[] = 'pageSize:must be greater than or equal to 1';
+        }
+
+        if ($pageSize > 100) {
+            $validationErrors[] = 'pageSize:must be less than or equal to 100';
+        }
+
+        if ($validationErrors !== []) {
+            throw new PMarketAPIException(implode('; ', $validationErrors));
+        }
+    }
+
+    private function normalizeTerminalStatus(string $status): string
+    {
+        return match ($status) {
+            'Active' => 'A',
+            'Inactive' => 'P',
+            'Suspend' => 'S',
+            'A', 'P', 'S' => $status,
+            default => throw new PMarketAPIException('status must be one of Active, Inactive, Suspend, A, P or S.'),
+        };
+    }
+
+    private function normalizeTerminalOrderBy(string $orderBy): string
+    {
+        return match ($orderBy) {
+            'Name' => 'name',
+            'Tid' => 'tid',
+            'SerialNo' => 'serialNo',
+            'name', 'tid', 'serialNo' => $orderBy,
+            default => throw new PMarketAPIException('orderBy must be one of Name, Tid, SerialNo, name, tid or serialNo.'),
+        };
     }
 
     private function boolString(bool $value): string

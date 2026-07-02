@@ -7,6 +7,7 @@ namespace PinVandaag\PMarketAPI;
 use GuzzleHttp\Client;
 use PinVandaag\PMarketAPI\Client\APIClient;
 use PinVandaag\PMarketAPI\Model\Terminal;
+use PinVandaag\PMarketAPI\Model\TerminalSearchResult;
 use Psr\Log\LoggerInterface;
 use SensitiveParameter;
 
@@ -37,6 +38,32 @@ final class PMarketAPIClient
             ->setApiSecret($apiSecret);
 
         return $this;
+    }
+
+    public function searchTerminal(
+        int $pageNo = 1,
+        int $pageSize = 10,
+        ?string $orderBy = null,
+        ?string $status = null,
+        ?string $snNameTID = null,
+        ?string $resellerName = null,
+        ?string $merchantName = null,
+        bool $includeGeoLocation = false,
+        bool $includeInstalledApks = false,
+        bool $includeInstalledFirmware = false,
+    ): TerminalSearchResult {
+        return $this->apiClient->searchTerminal(
+            $pageNo,
+            $pageSize,
+            $orderBy,
+            $status,
+            $snNameTID,
+            $resellerName,
+            $merchantName,
+            $includeGeoLocation,
+            $includeInstalledApks,
+            $includeInstalledFirmware,
+        );
     }
 
     /**
