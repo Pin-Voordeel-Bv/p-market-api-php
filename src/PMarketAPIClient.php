@@ -7,6 +7,7 @@ namespace PinVandaag\PMarketAPI;
 use GuzzleHttp\Client;
 use PinVandaag\PMarketAPI\Client\APIClient;
 use PinVandaag\PMarketAPI\Model\Terminal;
+use PinVandaag\PMarketAPI\Model\TerminalCreateRequest;
 use PinVandaag\PMarketAPI\Model\TerminalSearchResult;
 use Psr\Log\LoggerInterface;
 use SensitiveParameter;
@@ -83,5 +84,30 @@ final class PMarketAPIClient
             $includeInstalledFirmware,
             $includeMasterTerminal,
         );
+    }
+ 
+    public function createTerminal(TerminalCreateRequest $terminalCreateRequest): Terminal
+    {
+        return $this->apiClient->createTerminal($terminalCreateRequest);
+    }
+
+    public function disableTerminal(int|string $terminalId): bool
+    {
+        return $this->apiClient->disableTerminal($terminalId);
+    }
+
+    public function disableTerminalBySn(string $serialNo): bool
+    {
+        return $this->apiClient->disableTerminalBySn($serialNo);
+    }
+
+    public function deleteTerminal(int|string $terminalId): bool
+    {
+        return $this->apiClient->deleteTerminal($terminalId);
+    }
+
+    public function deleteTerminalBySn(string $serialNo): bool
+    {
+        return $this->apiClient->deleteTerminalBySn($serialNo);
     }
 }

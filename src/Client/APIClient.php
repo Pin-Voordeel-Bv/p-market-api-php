@@ -7,6 +7,7 @@ namespace PinVandaag\PMarketAPI\Client;
 use GuzzleHttp\ClientInterface;
 use PinVandaag\PMarketAPI\Exception\PMarketAPIException;
 use PinVandaag\PMarketAPI\Model\Terminal;
+use PinVandaag\PMarketAPI\Model\TerminalCreateRequest;
 use PinVandaag\PMarketAPI\Model\TerminalSearchResult;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Log\LoggerAwareTrait;
@@ -155,6 +156,120 @@ final class APIClient
     }
 
     /**
+     * Create a terminal.
+     *
+     * @throws PMarketAPIException
+     */
+    public function createTerminal(TerminalCreateRequest $terminalCreateRequest): Terminal
+    {
+        $this->assertTerminalCreateRequest($terminalCreateRequest);
+
+        $payload = array_filter([
+            'name' => $terminalCreateRequest->name,
+            'tid' => $terminalCreateRequest->tid,
+            'serialNo' => $terminalCreateRequest->serialNo,
+            'merchantName' => $terminalCreateRequest->merchantName,
+            'resellerName' => $terminalCreateRequest->resellerName,
+            'modelName' => $terminalCreateRequest->modelName,
+            'location' => $terminalCreateRequest->location,
+            'remark' => $terminalCreateRequest->remark,
+            'status' => $terminalCreateRequest->status !== null && $terminalCreateRequest->status !== ''
+                ? $this->normalizeTerminalCreateStatus($terminalCreateRequest->status)
+                : null,
+        ], static fn ($value): bool => $value !== null && $value !== '');
+
+        /** @var Terminal $terminal */
+        $terminal = $this->postResultData(
+            endpoint: '/v1/3rdsys/terminals',
+            responseClass: Terminal::class,
+            actionDescription: 'create P Market terminal',
+            body: $payload,
+        );
+
+        return $terminal;
+    }
+
+    /**
+     * Disable a terminal by terminal ID.
+     *
+     * @throws PMarketAPIException
+     */
+    public function disableTerminal(int|string $terminalId): bool
+    {
+        $terminalId = $this->assertPositiveInteger($terminalId, 'terminalId');
+
+        $this->emptyResult(
+            method: 'PUT',
+            endpoint: sprintf('/v1/3rdsys/terminals/%s/disable', rawurlencode((string) $terminalId)),
+            actionDescription: sprintf('disable P Market terminal "%s"', $terminalId),
+        );
+
+        return true;
+    }
+
+    /**
+     * Disable a terminal by serial number.
+     *
+     * @throws PMarketAPIException
+     */
+    public function disableTerminalBySn(string $serialNo): bool
+    {
+        $serialNo = trim($serialNo);
+        if ($serialNo === '') {
+            throw new PMarketAPIException('serialNo cannot be empty.');
+        }
+
+        $this->emptyResult(
+            method: 'PUT',
+            endpoint: '/v1/3rdsys/terminal/disable',
+            actionDescription: sprintf('disable P Market terminal by serialNo "%s"', $serialNo),
+            query: ['serialNo' => $serialNo],
+        );
+
+        return true;
+    }
+
+    /**
+     * Delete a terminal by terminal ID.
+     *
+     * @throws PMarketAPIException
+     */
+    public function deleteTerminal(int|string $terminalId): bool
+    {
+        $terminalId = $this->assertPositiveInteger($terminalId, 'terminalId');
+
+        $this->deleteResult(
+            endpoint: sprintf('/v1/3rdsys/terminals/%s', rawurlencode((string) $terminalId)),
+            actionDescription: sprintf('delete P Market terminal "%s"', $terminalId),
+        );
+
+        return true;
+    }
+
+    /**
+     * Delete a terminal by serial number.
+     *
+     * @throws PMarketAPIException
+     */
+    public function deleteTerminalBySn(string $serialNo): bool
+    {
+        $serialNo = trim($serialNo);
+        if ($serialNo === '') {
+            throw new PMarketAPIException('serialNo cannot be empty.');
+        }
+
+        $this->deleteResult(
+            endpoint: '/v1/3rdsys/terminal',
+            actionDescription: sprintf('delete P Market terminal by serialNo "%s"', $serialNo),
+            query: [
+                'serialNo' => $serialNo,
+            ],
+        );
+
+        return true;
+    }
+
+    /**
      * @template T of object
      *
      * @param class-string<T> $responseClass
@@ -183,6 +298,83 @@ final class APIClient
         );
 
         return $this->deserializeResultData($response, $responseClass, $actionDescription);
+    }
+
+    /**
+     * @template T of object
+     *
+     * @param class-string<T> $responseClass
+     * @param array<string, mixed> $body
+     *
+     * @return T
+     *
+     * @throws PMarketAPIException
+     */
+    private function postResultData(
+        string $endpoint,
+        string $responseClass,
+        string $actionDescription,
+        array $query = [],
+        array $body = [],
+        array $headers = [],
+    ): object {
+        $response = $this->request(
+            method: 'POST',
+            endpoint: $endpoint,
+            query: $query,
+            options: [
+                'headers' => $this->defaultHeaders() + ['Content-Type' => 'application/json'] + $headers,
+                'json' => $body,
+            ],
+            actionDescription: $actionDescription,
+        );
+
+        return $this->deserializeResultData($response, $responseClass, $actionDescription);
+    }
+
+    /**
+     * @param array<string, string> $query
+     * @param array<string, string> $headers
+     *
+     * @throws PMarketAPIException
+     */
+    private function deleteResult(
+        string $endpoint,
+        string $actionDescription,
+        array $query = [],
+        array $headers = [],
+    ): void {
+        $response = $this->request(
+            method: 'DELETE',
+            endpoint: $endpoint,
+            query: $query,
+            options: [
+                'headers' => $this->defaultHeaders() + $headers,
+            ],
+            actionDescription: $actionDescription,
+        );
+
+        $this->deserializeEmptyResult($response, $actionDescription);
+    }
+
+    private function emptyResult(
+        string $method,
+        string $endpoint,
+        string $actionDescription,
+        array $query = [],
+        array $headers = [],
+    ): void {
+        $response = $this->request(
+            method: $method,
+            endpoint: $endpoint,
+            query: $query,
+            options: [
+                'headers' => $this->defaultHeaders() + $headers,
+            ],
+            actionDescription: $actionDescription,
+        );
+
+        $this->deserializeEmptyResult($response, $actionDescription);
     }
 
     private function getResultPage(
@@ -444,6 +636,42 @@ final class APIClient
     }
 
     /**
+     * @throws PMarketAPIException
+     */
+    private function deserializeEmptyResult(
+        ResponseInterface $response,
+        string $actionDescription,
+    ): void {
+        $statusCode = $response->getStatusCode();
+        $body = (string) $response->getBody();
+
+        if ($statusCode < 200 || $statusCode >= 300) {
+            throw new PMarketAPIException(
+                $this->errorMessageFromResponseBody($body, $actionDescription, $statusCode),
+                $statusCode,
+            );
+        }
+
+        $trimmedBody = trim($body);
+        if ($trimmedBody === '') {
+            return;
+        }
+
+        $decoded = json_decode($trimmedBody, true);
+        if (!is_array($decoded)) {
+            throw new PMarketAPIException(sprintf('Could not decode P Market response for %s.', $actionDescription));
+        }
+
+        $businessCode = $decoded['businessCode'] ?? null;
+        if ($businessCode !== 0) {
+            throw new PMarketAPIException(
+                $this->resultErrorMessage($decoded, $actionDescription, $statusCode),
+                (int) ($businessCode ?? 0),
+            );
+        }
+    }
+
+    /**
      * @param array<string, mixed> $decoded
      */
     private function resultErrorMessage(array $decoded, string $actionDescription, int $statusCode): string
@@ -502,6 +730,88 @@ final class APIClient
         if ($validationErrors !== []) {
             throw new PMarketAPIException(implode('; ', $validationErrors));
         }
+    }
+
+    private function assertTerminalCreateRequest(TerminalCreateRequest $request): void
+    {
+        $validationErrors = [];
+
+        if (trim($request->name) === '') {
+            $validationErrors[] = 'name:may not be empty';
+        }
+
+        if (mb_strlen($request->name) > 64) {
+            $validationErrors[] = 'name:length must be between 0 and 64';
+        }
+
+        if ($request->resellerName === null || trim($request->resellerName) === '') {
+            $validationErrors[] = 'resellerName:may not be empty';
+        }
+
+        if ($request->resellerName !== null && mb_strlen($request->resellerName) > 64) {
+            $validationErrors[] = 'resellerName:length must be between 0 and 64';
+        }
+
+        if ($request->modelName === null || trim($request->modelName) === '') {
+            $validationErrors[] = 'modelName:may not be empty';
+        }
+
+        if ($request->modelName !== null && mb_strlen($request->modelName) > 64) {
+            $validationErrors[] = 'modelName:length must be between 0 and 64';
+        }
+
+        if ($request->tid !== null && $request->tid !== '') {
+            $tidLength = mb_strlen($request->tid);
+            if ($tidLength < 8 || $tidLength > 15) {
+                $validationErrors[] = 'tid:length must be between 8 and 15';
+            }
+        }
+
+        if ($request->serialNo !== null && $request->serialNo !== '') {
+            if (mb_strlen($request->serialNo) > 32) {
+                $validationErrors[] = 'serialNo:length must be between 0 and 32';
+            }
+        }
+
+        if ($request->merchantName !== null && mb_strlen($request->merchantName) > 64) {
+            $validationErrors[] = 'merchantName:length must be between 0 and 64';
+        }
+
+        if ($request->location !== null && mb_strlen($request->location) > 32) {
+            $validationErrors[] = 'location:length must be between 0 and 32';
+        }
+
+        if ($request->remark !== null && mb_strlen($request->remark) > 500) {
+            $validationErrors[] = 'remark:length must be between 0 and 500';
+        }
+
+        $status = $request->status !== null && $request->status !== ''
+            ? $this->normalizeTerminalCreateStatus($request->status)
+            : null;
+
+        if ($status === 'A') {
+            if ($request->serialNo === null || trim($request->serialNo) === '') {
+                $validationErrors[] = 'serialNo:may not be empty when status is Active';
+            }
+
+            if ($request->merchantName === null || trim($request->merchantName) === '') {
+                $validationErrors[] = 'merchantName:may not be empty when status is Active';
+            }
+        }
+
+        if ($validationErrors !== []) {
+            throw new PMarketAPIException(implode('; ', $validationErrors));
+        }
+    }
+
+    private function normalizeTerminalCreateStatus(string $status): string
+    {
+        return match ($status) {
+            'Active' => 'A',
+            'Pending', 'Pendding' => 'P',
+            'A', 'P' => $status,
+            default => throw new PMarketAPIException('status must be one of Active, Pending, A or P.'),
+        };
     }
 
     private function normalizeTerminalStatus(string $status): string
