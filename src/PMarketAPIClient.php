@@ -7,8 +7,10 @@ namespace PinVandaag\PMarketAPI;
 use GuzzleHttp\Client;
 use PinVandaag\PMarketAPI\Client\APIClient;
 use PinVandaag\PMarketAPI\Model\Terminal;
+use PinVandaag\PMarketAPI\Model\TerminalCopyRequest;
 use PinVandaag\PMarketAPI\Model\TerminalCreateRequest;
 use PinVandaag\PMarketAPI\Model\TerminalSearchResult;
+use PinVandaag\PMarketAPI\Model\TerminalUpdateRequest;
 use Psr\Log\LoggerInterface;
 use SensitiveParameter;
 
@@ -91,6 +93,36 @@ final class PMarketAPIClient
         return $this->apiClient->createTerminal($terminalCreateRequest);
     }
 
+    public function updateTerminal(int|string $terminalId, TerminalUpdateRequest $terminalUpdateRequest): Terminal
+    {
+        return $this->apiClient->updateTerminal($terminalId, $terminalUpdateRequest);
+    }
+
+    public function updateTerminalBySn(string $serialNo, TerminalUpdateRequest $terminalUpdateRequest): Terminal
+    {
+        return $this->apiClient->updateTerminalBySn($serialNo, $terminalUpdateRequest);
+    }
+
+    public function copyTerminal(TerminalCopyRequest $terminalCopyRequest): Terminal
+    {
+        return $this->apiClient->copyTerminal($terminalCopyRequest);
+    }
+
+    public function copyTerminalBySn(TerminalCopyRequest $terminalCopyRequest): Terminal
+    {
+        return $this->apiClient->copyTerminalBySn($terminalCopyRequest);
+    }
+
+    public function activateTerminal(int|string $terminalId): bool
+    {
+        return $this->apiClient->activateTerminal($terminalId);
+    }
+
+    public function activateTerminalBySn(string $serialNo): bool
+    {
+        return $this->apiClient->activateTerminalBySn($serialNo);
+    }
+
     public function disableTerminal(int|string $terminalId): bool
     {
         return $this->apiClient->disableTerminal($terminalId);
@@ -99,6 +131,16 @@ final class PMarketAPIClient
     public function disableTerminalBySn(string $serialNo): bool
     {
         return $this->apiClient->disableTerminalBySn($serialNo);
+    }
+
+    public function moveTerminal(int|string $terminalId, string $resellerName, string $merchantName): bool
+    {
+        return $this->apiClient->moveTerminal($terminalId, $resellerName, $merchantName);
+    }
+
+    public function moveTerminalBySn(string $serialNo, string $resellerName, string $merchantName): bool
+    {
+        return $this->apiClient->moveTerminalBySn($serialNo, $resellerName, $merchantName);
     }
 
     public function deleteTerminal(int|string $terminalId): bool

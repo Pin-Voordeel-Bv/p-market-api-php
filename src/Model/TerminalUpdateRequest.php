@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace PinVandaag\PMarketAPI\Model;
 
-final readonly class TerminalCreateRequest
+final readonly class TerminalUpdateRequest
 {
     public function __construct(
         public string $name,
@@ -15,7 +15,6 @@ final readonly class TerminalCreateRequest
         public ?string $merchantName = null,
         public ?string $location = null,
         public ?string $remark = null,
-        public ?string $status = null,
     ) {
     }
 }
