@@ -27,14 +27,14 @@ final class PMarketAPIClient
     }
 
     public function configure(
+        string $baseUri,
         #[SensitiveParameter] string $apiKey,
-        ?string $baseUri = null,
+        #[SensitiveParameter] string $apiSecret,
     ): self {
-        $this->apiClient->setApiKey($apiKey);
-
-        if ($baseUri !== null) {
-            $this->apiClient->setBaseUri($baseUri);
-        }
+        $this->apiClient
+            ->setBaseUri($baseUri)
+            ->setApiKey($apiKey)
+            ->setApiSecret($apiSecret);
 
         return $this;
     }
@@ -43,8 +43,18 @@ final class PMarketAPIClient
      * Retrieve a terminal by terminal ID.
      */
     public function getTerminal(
-        string $terminalId,
+        int|string $terminalId,
+        bool $includeDetailInfoList = false,
+        bool $includeInstalledApks = false,
+        bool $includeInstalledFirmware = false,
+        bool $includeMasterTerminal = false,
     ): Terminal {
-        return $this->apiClient->getTerminal($terminalId);
+        return $this->apiClient->getTerminal(
+            $terminalId,
+            $includeDetailInfoList,
+            $includeInstalledApks,
+            $includeInstalledFirmware,
+            $includeMasterTerminal,
+        );
     }
 }
