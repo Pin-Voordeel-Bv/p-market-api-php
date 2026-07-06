@@ -878,7 +878,8 @@ final class APIClient
     {
         $terminalId = $this->assertPositiveInteger($terminalId, 'terminalId');
 
-        $this->deleteResult(
+        $this->emptyResult(
+            method: 'DELETE',
             endpoint: sprintf('/v1/3rdsys/terminals/%s', rawurlencode((string) $terminalId)),
             actionDescription: sprintf('delete P Market terminal "%s"', $terminalId),
         );
@@ -898,7 +899,8 @@ final class APIClient
             throw new PMarketAPIException('serialNo cannot be empty.');
         }
 
-        $this->deleteResult(
+        $this->emptyResult(
+            method: 'DELETE',
             endpoint: '/v1/3rdsys/terminal',
             actionDescription: sprintf('delete P Market terminal by serialNo "%s"', $serialNo),
             query: [
@@ -1807,6 +1809,35 @@ final class APIClient
         ], static fn ($value): bool => $value !== null && $value !== [] && $value !== '');
     }
 
+    private function resultData(
+        string $method,
+        string $endpoint,
+        string $responseClass,
+        string $actionDescription,
+        array $query = [],
+        array $body = [],
+        array $headers = [],
+    ): object {
+        $options = [
+            'headers' => $this->defaultHeaders() + $headers,
+        ];
+
+        if ($body !== []) {
+            $options['headers'] += ['Content-Type' => 'application/json'];
+            $options['json'] = $body;
+        }
+
+        $response = $this->request(
+            method: $method,
+            endpoint: $endpoint,
+            query: $query,
+            options: $options,
+            actionDescription: $actionDescription,
+        );
+
+        return $this->deserializeResultData($response, $responseClass, $actionDescription);
+    }
+
     /**
      * @template T of object
      *
@@ -1825,17 +1856,7 @@ final class APIClient
         array $query = [],
         array $headers = [],
     ): object {
-        $response = $this->request(
-            method: 'GET',
-            endpoint: $endpoint,
-            query: $query,
-            options: [
-                'headers' => $this->defaultHeaders() + $headers,
-            ],
-            actionDescription: $actionDescription,
-        );
-
-        return $this->deserializeResultData($response, $responseClass, $actionDescription);
+        return $this->resultData('GET', $endpoint, $responseClass, $actionDescription, $query, [], $headers);
     }
 
     private function getResultRawData(
@@ -1888,18 +1909,7 @@ final class APIClient
         array $body = [],
         array $headers = [],
     ): object {
-        $response = $this->request(
-            method: 'POST',
-            endpoint: $endpoint,
-            query: $query,
-            options: [
-                'headers' => $this->defaultHeaders() + ['Content-Type' => 'application/json'] + $headers,
-                'json' => $body,
-            ],
-            actionDescription: $actionDescription,
-        );
-
-        return $this->deserializeResultData($response, $responseClass, $actionDescription);
+        return $this->resultData('POST', $endpoint, $responseClass, $actionDescription, $query, $body, $headers);
     }
 
     /**
@@ -1920,43 +1930,7 @@ final class APIClient
         array $body = [],
         array $headers = [],
     ): object {
-        $response = $this->request(
-            method: 'PUT',
-            endpoint: $endpoint,
-            query: $query,
-            options: [
-                'headers' => $this->defaultHeaders() + ['Content-Type' => 'application/json'] + $headers,
-                'json' => $body,
-            ],
-            actionDescription: $actionDescription,
-        );
-
-        return $this->deserializeResultData($response, $responseClass, $actionDescription);
-    }
-
-    /**
-     * @param array<string, string> $query
-     * @param array<string, string> $headers
-     *
-     * @throws PMarketAPIException
-     */
-    private function deleteResult(
-        string $endpoint,
-        string $actionDescription,
-        array $query = [],
-        array $headers = [],
-    ): void {
-        $response = $this->request(
-            method: 'DELETE',
-            endpoint: $endpoint,
-            query: $query,
-            options: [
-                'headers' => $this->defaultHeaders() + $headers,
-            ],
-            actionDescription: $actionDescription,
-        );
-
-        $this->deserializeEmptyResult($response, $actionDescription);
+        return $this->resultData('PUT', $endpoint, $responseClass, $actionDescription, $query, $body, $headers);
     }
 
     private function emptyResult(
