@@ -13,6 +13,11 @@ use PinVandaag\PMarketAPI\Model\MerchantCategoryRequest;
 use PinVandaag\PMarketAPI\Model\MerchantCreateRequest;
 use PinVandaag\PMarketAPI\Model\MerchantSearchResult;
 use PinVandaag\PMarketAPI\Model\MerchantUpdateRequest;
+use PinVandaag\PMarketAPI\Model\Reseller;
+use PinVandaag\PMarketAPI\Model\ResellerCreateRequest;
+use PinVandaag\PMarketAPI\Model\ResellerRkiKeySearchResult;
+use PinVandaag\PMarketAPI\Model\ResellerSearchResult;
+use PinVandaag\PMarketAPI\Model\ResellerUpdateRequest;
 use PinVandaag\PMarketAPI\Model\Terminal;
 use PinVandaag\PMarketAPI\Model\TerminalCopyRequest;
 use PinVandaag\PMarketAPI\Model\TerminalCreateRequest;
@@ -152,6 +157,68 @@ final class PMarketAPIClient
     public function batchCreateMerchantCategory(array $requests, bool $skipExist = false): array
     {
         return $this->apiClient->batchCreateMerchantCategory($requests, $skipExist);
+    }
+
+    public function searchReseller(
+        int $pageNo = 1,
+        int $pageSize = 10,
+        ?string $orderBy = null,
+        ?string $name = null,
+        ?string $status = null,
+        bool $includeEntityAttribute = false,
+    ): ResellerSearchResult {
+        return $this->apiClient->searchReseller(
+            $pageNo,
+            $pageSize,
+            $orderBy,
+            $name,
+            $status,
+            $includeEntityAttribute,
+        );
+    }
+
+    public function getReseller(int|string $resellerId): Reseller
+    {
+        return $this->apiClient->getReseller($resellerId);
+    }
+
+    public function createReseller(ResellerCreateRequest $request): Reseller
+    {
+        return $this->apiClient->createReseller($request);
+    }
+
+    public function updateReseller(int|string $resellerId, ResellerUpdateRequest $request): Reseller
+    {
+        return $this->apiClient->updateReseller($resellerId, $request);
+    }
+
+    public function activateReseller(int|string $resellerId): bool
+    {
+        return $this->apiClient->activateReseller($resellerId);
+    }
+
+    public function disableReseller(int|string $resellerId): bool
+    {
+        return $this->apiClient->disableReseller($resellerId);
+    }
+
+    public function deleteReseller(int|string $resellerId): bool
+    {
+        return $this->apiClient->deleteReseller($resellerId);
+    }
+
+    public function replaceResellerEmail(int|string $resellerId, string $email): bool
+    {
+        return $this->apiClient->replaceResellerEmail($resellerId, $email);
+    }
+
+    public function searchResellerRkiKeyList(
+        int|string $resellerId,
+        int $pageNo = 1,
+        int $pageSize = 10,
+        ?string $rkiKey = null,
+    ): ResellerRkiKeySearchResult {
+        return $this->apiClient->searchResellerRkiKeyList($resellerId, $pageNo, $pageSize, $rkiKey);
     }
 
     public function searchTerminal(

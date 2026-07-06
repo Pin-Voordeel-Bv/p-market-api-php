@@ -8,6 +8,7 @@ use GuzzleHttp\ClientInterface;
 use PinVandaag\PMarketAPI\Client\Traits\FactoryModelApiTrait;
 use PinVandaag\PMarketAPI\Client\Traits\MerchantApiTrait;
 use PinVandaag\PMarketAPI\Client\Traits\MerchantCategoryApiTrait;
+use PinVandaag\PMarketAPI\Client\Traits\ResellerApiTrait;
 use PinVandaag\PMarketAPI\Client\Traits\TerminalApiTrait;
 use PinVandaag\PMarketAPI\Client\Traits\TerminalGroupApiTrait;
 use PinVandaag\PMarketAPI\Exception\PMarketAPIException;
@@ -27,6 +28,7 @@ final class APIClient
     use FactoryModelApiTrait;
     use MerchantApiTrait;
     use MerchantCategoryApiTrait;
+    use ResellerApiTrait;
     use TerminalApiTrait;
     use TerminalGroupApiTrait;
 
