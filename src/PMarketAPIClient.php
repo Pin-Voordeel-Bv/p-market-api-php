@@ -7,6 +7,11 @@ namespace PinVandaag\PMarketAPI;
 use GuzzleHttp\Client;
 use PinVandaag\PMarketAPI\Client\APIClient;
 use PinVandaag\PMarketAPI\Model\DisablePushFirmwareTaskRequest;
+use PinVandaag\PMarketAPI\Model\EntityAttribute;
+use PinVandaag\PMarketAPI\Model\EntityAttributeCreateRequest;
+use PinVandaag\PMarketAPI\Model\EntityAttributeLabelUpdateRequest;
+use PinVandaag\PMarketAPI\Model\EntityAttributeSearchResult;
+use PinVandaag\PMarketAPI\Model\EntityAttributeUpdateRequest;
 use PinVandaag\PMarketAPI\Model\FactoryModelSearchResult;
 use PinVandaag\PMarketAPI\Model\Merchant;
 use PinVandaag\PMarketAPI\Model\MerchantCategory;
@@ -65,6 +70,45 @@ final class PMarketAPIClient
             ->setApiSecret($apiSecret);
 
         return $this;
+    }
+
+    public function getEntityAttribute(int|string $attributeId): EntityAttribute
+    {
+        return $this->apiClient->getEntityAttribute($attributeId);
+    }
+
+    public function searchEntityAttributes(
+        int $pageNo = 1,
+        int $pageSize = 10,
+        ?string $orderBy = null,
+        ?string $key = null,
+        ?string $entityType = null,
+    ): EntityAttributeSearchResult {
+        return $this->apiClient->searchEntityAttributes($pageNo, $pageSize, $orderBy, $key, $entityType);
+    }
+
+    public function createEntityAttribute(EntityAttributeCreateRequest $request): EntityAttribute
+    {
+        return $this->apiClient->createEntityAttribute($request);
+    }
+
+    public function updateEntityAttribute(
+        int|string $attributeId,
+        EntityAttributeUpdateRequest $request,
+    ): EntityAttribute {
+        return $this->apiClient->updateEntityAttribute($attributeId, $request);
+    }
+
+    public function updateEntityAttributeLabel(
+        int|string $attributeId,
+        EntityAttributeLabelUpdateRequest $request,
+    ): bool {
+        return $this->apiClient->updateEntityAttributeLabel($attributeId, $request);
+    }
+
+    public function deleteEntityAttribute(int|string $attributeId): bool
+    {
+        return $this->apiClient->deleteEntityAttribute($attributeId);
     }
 
     public function searchFactoryModels(
