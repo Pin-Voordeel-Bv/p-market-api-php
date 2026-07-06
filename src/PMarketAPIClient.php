@@ -6,10 +6,24 @@ namespace PinVandaag\PMarketAPI;
 
 use GuzzleHttp\Client;
 use PinVandaag\PMarketAPI\Client\APIClient;
+use PinVandaag\PMarketAPI\Model\Merchant;
+use PinVandaag\PMarketAPI\Model\MerchantCategory;
+use PinVandaag\PMarketAPI\Model\MerchantCategoryRequest;
+use PinVandaag\PMarketAPI\Model\MerchantCreateRequest;
+use PinVandaag\PMarketAPI\Model\MerchantSearchResult;
+use PinVandaag\PMarketAPI\Model\MerchantUpdateRequest;
 use PinVandaag\PMarketAPI\Model\Terminal;
 use PinVandaag\PMarketAPI\Model\TerminalCopyRequest;
 use PinVandaag\PMarketAPI\Model\TerminalCreateRequest;
+use PinVandaag\PMarketAPI\Model\TerminalGroup;
+use PinVandaag\PMarketAPI\Model\TerminalGroupRequest;
+use PinVandaag\PMarketAPI\Model\TerminalGroupSearchResult;
+use PinVandaag\PMarketAPI\Model\TerminalLogDownloadTask;
+use PinVandaag\PMarketAPI\Model\TerminalLogSearchResult;
+use PinVandaag\PMarketAPI\Model\TerminalNetwork;
+use PinVandaag\PMarketAPI\Model\TerminalPed;
 use PinVandaag\PMarketAPI\Model\TerminalSearchResult;
+use PinVandaag\PMarketAPI\Model\TerminalSystemUsage;
 use PinVandaag\PMarketAPI\Model\TerminalUpdateRequest;
 use Psr\Log\LoggerInterface;
 use SensitiveParameter;
@@ -41,6 +55,84 @@ final class PMarketAPIClient
             ->setApiSecret($apiSecret);
 
         return $this;
+    }
+
+    public function searchMerchant(
+        int $pageNo = 1,
+        int $pageSize = 10,
+        ?string $orderBy = null,
+        ?string $name = null,
+        ?string $status = null,
+        bool $includeEntityAttribute = false,
+    ): MerchantSearchResult {
+        return $this->apiClient->searchMerchant(
+            $pageNo,
+            $pageSize,
+            $orderBy,
+            $name,
+            $status,
+            $includeEntityAttribute,
+        );
+    }
+
+    public function getMerchant(int|string $merchantId): Merchant
+    {
+        return $this->apiClient->getMerchant($merchantId);
+    }
+
+    public function createMerchant(MerchantCreateRequest $merchantCreateRequest): Merchant
+    {
+        return $this->apiClient->createMerchant($merchantCreateRequest);
+    }
+
+    public function updateMerchant(int|string $merchantId, MerchantUpdateRequest $merchantUpdateRequest): Merchant
+    {
+        return $this->apiClient->updateMerchant($merchantId, $merchantUpdateRequest);
+    }
+
+    public function activateMerchant(int|string $merchantId): bool
+    {
+        return $this->apiClient->activateMerchant($merchantId);
+    }
+
+    public function disableMerchant(int|string $merchantId): bool
+    {
+        return $this->apiClient->disableMerchant($merchantId);
+    }
+
+    public function deleteMerchant(int|string $merchantId): bool
+    {
+        return $this->apiClient->deleteMerchant($merchantId);
+    }
+
+    public function replaceMerchantEmail(int|string $merchantId, string $email, bool $createUser): bool
+    {
+        return $this->apiClient->replaceMerchantEmail($merchantId, $email, $createUser);
+    }
+
+    public function getMerchantCategories(?string $name = null): array
+    {
+        return $this->apiClient->getMerchantCategories($name);
+    }
+
+    public function createMerchantCategory(MerchantCategoryRequest $request): MerchantCategory
+    {
+        return $this->apiClient->createMerchantCategory($request);
+    }
+
+    public function updateMerchantCategory(int|string $merchantCategoryId, MerchantCategoryRequest $request): MerchantCategory
+    {
+        return $this->apiClient->updateMerchantCategory($merchantCategoryId, $request);
+    }
+
+    public function deleteMerchantCategory(int|string $merchantCategoryId): bool
+    {
+        return $this->apiClient->deleteMerchantCategory($merchantCategoryId);
+    }
+
+    public function batchCreateMerchantCategory(array $requests, bool $skipExist = false): array
+    {
+        return $this->apiClient->batchCreateMerchantCategory($requests, $skipExist);
     }
 
     public function searchTerminal(
@@ -151,5 +243,192 @@ final class PMarketAPIClient
     public function deleteTerminalBySn(string $serialNo): bool
     {
         return $this->apiClient->deleteTerminalBySn($serialNo);
+    }
+
+    public function batchAddTerminalToGroup(array $terminalIds, array $groupIds): bool
+    {
+        return $this->apiClient->batchAddTerminalToGroup($terminalIds, $groupIds);
+    }
+
+    public function batchAddTerminalToGroupBySn(array $serialNos, array $groupIds): bool
+    {
+        return $this->apiClient->batchAddTerminalToGroupBySn($serialNos, $groupIds);
+    }
+
+    public function getTerminalConfig(int|string $terminalId): array
+    {
+        return $this->apiClient->getTerminalConfig($terminalId);
+    }
+
+    public function getTerminalConfigBySn(string $serialNo): array
+    {
+        return $this->apiClient->getTerminalConfigBySn($serialNo);
+    }
+
+    public function updateTerminalConfig(int|string $terminalId, array $configuration): bool
+    {
+        return $this->apiClient->updateTerminalConfig($terminalId, $configuration);
+    }
+
+    public function updateTerminalConfigBySn(string $serialNo, array $configuration): bool
+    {
+        return $this->apiClient->updateTerminalConfigBySn($serialNo, $configuration);
+    }
+
+    public function pushCmdToTerminal(int|string $terminalId, string $command): bool
+    {
+        return $this->apiClient->pushCmdToTerminal($terminalId, $command);
+    }
+
+    public function pushCmdToTerminalBySn(string $serialNo, string $command): bool
+    {
+        return $this->apiClient->pushCmdToTerminalBySn($serialNo, $command);
+    }
+
+    public function pushTerminalMessage(int|string $terminalId, string $title, string $content): bool
+    {
+        return $this->apiClient->pushTerminalMessage($terminalId, $title, $content);
+    }
+
+    public function pushTerminalMessageBySn(string $serialNo, string $title, string $content): bool
+    {
+        return $this->apiClient->pushTerminalMessageBySn($serialNo, $title, $content);
+    }
+
+    public function changeTerminalModel(int|string $terminalId, string $modelName): bool
+    {
+        return $this->apiClient->changeTerminalModel($terminalId, $modelName);
+    }
+
+    public function changeTerminalModelBySn(string $serialNo, string $modelName): bool
+    {
+        return $this->apiClient->changeTerminalModelBySn($serialNo, $modelName);
+    }
+
+    public function pushTerminalSetLauncherAction(int|string $terminalId, string $packageName): bool
+    {
+        return $this->apiClient->pushTerminalSetLauncherAction($terminalId, $packageName);
+    }
+
+    public function pushTerminalSetLauncherActionBySn(string $serialNo, string $packageName): bool
+    {
+        return $this->apiClient->pushTerminalSetLauncherActionBySn($serialNo, $packageName);
+    }
+
+    public function getTerminalNetwork(?string $serialNo = null, ?string $tid = null): TerminalNetwork
+    {
+        return $this->apiClient->getTerminalNetwork($serialNo, $tid);
+    }
+
+    public function getTerminalPed(int|string $terminalId): TerminalPed
+    {
+        return $this->apiClient->getTerminalPed($terminalId);
+    }
+
+    public function getTerminalPedBySn(string $serialNo): TerminalPed
+    {
+        return $this->apiClient->getTerminalPedBySn($serialNo);
+    }
+
+    public function getTerminalSystemUsageById(int|string $terminalId): TerminalSystemUsage
+    {
+        return $this->apiClient->getTerminalSystemUsageById($terminalId);
+    }
+
+    public function getTerminalSystemUsageBySn(string $serialNo): TerminalSystemUsage
+    {
+        return $this->apiClient->getTerminalSystemUsageBySn($serialNo);
+    }
+
+    public function collectTerminalLog(int|string $terminalId, string $type, ?string $beginDate = null, ?string $endDate = null): bool
+    {
+        return $this->apiClient->collectTerminalLog($terminalId, $type, $beginDate, $endDate);
+    }
+
+    public function collectTerminalLogBySn(string $serialNo, string $type, ?string $beginDate = null, ?string $endDate = null): bool
+    {
+        return $this->apiClient->collectTerminalLogBySn($serialNo, $type, $beginDate, $endDate);
+    }
+
+    public function searchTerminalLog(int|string $terminalId, int $pageNo = 1, int $pageSize = 10): TerminalLogSearchResult
+    {
+        return $this->apiClient->searchTerminalLog($terminalId, $pageNo, $pageSize);
+    }
+
+    public function searchTerminalLogBySn(string $serialNo, int $pageNo = 1, int $pageSize = 10): TerminalLogSearchResult
+    {
+        return $this->apiClient->searchTerminalLogBySn($serialNo, $pageNo, $pageSize);
+    }
+
+    public function downloadTerminalLog(int|string $terminalId, int|string $terminalLogId): TerminalLogDownloadTask
+    {
+        return $this->apiClient->downloadTerminalLog($terminalId, $terminalLogId);
+    }
+
+    public function downloadTerminalLogBySn(string $serialNo, int|string $terminalLogId): TerminalLogDownloadTask
+    {
+        return $this->apiClient->downloadTerminalLogBySn($serialNo, $terminalLogId);
+    }
+
+    public function searchTerminalGroup(
+        int $pageNo = 1,
+        int $pageSize = 10,
+        ?string $orderBy = null,
+        ?string $status = null,
+        ?string $name = null,
+        ?string $resellerNames = null,
+        ?string $modelNames = null,
+        ?bool $isDynamic = null,
+    ): TerminalGroupSearchResult {
+        return $this->apiClient->searchTerminalGroup(
+            $pageNo,
+            $pageSize,
+            $orderBy,
+            $status,
+            $name,
+            $resellerNames,
+            $modelNames,
+            $isDynamic,
+        );
+    }
+
+    public function getTerminalGroup(int|string $groupId): TerminalGroup
+    {
+        return $this->apiClient->getTerminalGroup($groupId);
+    }
+
+    public function createTerminalGroup(TerminalGroupRequest $request): TerminalGroup
+    {
+        return $this->apiClient->createTerminalGroup($request);
+    }
+
+    public function updateTerminalGroup(int|string $groupId, TerminalGroupRequest $request): TerminalGroup
+    {
+        return $this->apiClient->updateTerminalGroup($groupId, $request);
+    }
+
+    public function activateTerminalGroup(int|string $groupId): bool
+    {
+        return $this->apiClient->activateTerminalGroup($groupId);
+    }
+
+    public function disableTerminalGroup(int|string $groupId): bool
+    {
+        return $this->apiClient->disableTerminalGroup($groupId);
+    }
+
+    public function deleteTerminalGroup(int|string $groupId): bool
+    {
+        return $this->apiClient->deleteTerminalGroup($groupId);
+    }
+
+    public function addTerminalToGroup(int|string $groupId, array $terminalIds): bool
+    {
+        return $this->apiClient->addTerminalToGroup($groupId, $terminalIds);
+    }
+
+    public function removeTerminalOutGroup(int|string $groupId, array $terminalIds): bool
+    {
+        return $this->apiClient->removeTerminalOutGroup($groupId, $terminalIds);
     }
 }

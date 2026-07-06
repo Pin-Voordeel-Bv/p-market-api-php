@@ -22,11 +22,12 @@ final class PMarketController
     {
         $dotenv = Dotenv::createImmutable(__DIR__ . "/../../../../");
         $dotenv->safeLoad();
-        $dotenv->required(['P_MARKET_API_URL', 'P_MARKET_API_KEY', 'P_MARKET_API_SECRET'])->notEmpty();
+        $dotenv->required(['P_MARKET_API_KEY', 'P_MARKET_API_SECRET'])->notEmpty();
 
         $this->apiClient = (new PMarketAPIClient())
             ->configure(
-                apiUrl: $_ENV['P_MARKET_API_URL'],
+                // baseUri: 'https://api.whatspos.com/p-market-api',
+                baseUri: 'https://api.store.ccv.eu/p-market-api',
                 apiKey: $_ENV['P_MARKET_API_KEY'],
                 apiSecret: $_ENV['P_MARKET_API_SECRET']
             );
