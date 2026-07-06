@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace PinVandaag\PMarketAPI\Client;
 
 use GuzzleHttp\ClientInterface;
+use PinVandaag\PMarketAPI\Client\Traits\FactoryModelApiTrait;
 use PinVandaag\PMarketAPI\Client\Traits\MerchantApiTrait;
 use PinVandaag\PMarketAPI\Client\Traits\MerchantCategoryApiTrait;
 use PinVandaag\PMarketAPI\Client\Traits\TerminalApiTrait;
@@ -23,6 +24,7 @@ use Throwable;
 final class APIClient
 {
     use LoggerAwareTrait;
+    use FactoryModelApiTrait;
     use MerchantApiTrait;
     use MerchantCategoryApiTrait;
     use TerminalApiTrait;

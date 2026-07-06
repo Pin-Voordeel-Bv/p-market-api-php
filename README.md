@@ -6,6 +6,7 @@ A PHP Wrapper for the <a href="https://github.com/PAXSTORE/paxstore-openapi-java
 
 ## Implemented
 
+- <a href="https://github.com/PAXSTORE/paxstore-openapi-java-sdk/blob/master/docs/FACTORY_MODEL_API.md">FactoryModel</a>
 - <a href="https://github.com/PAXSTORE/paxstore-openapi-java-sdk/blob/master/docs/MERCHANT_API.md">Merchant</a>
 - <a href="https://github.com/PAXSTORE/paxstore-openapi-java-sdk/blob/master/docs/MERCHANT_CATEGORY_API.md">MerchantCategory</a>
 - <a href="https://github.com/PAXSTORE/paxstore-openapi-java-sdk/blob/master/docs/TERMINAL_API.md">Terminal</a>

@@ -6,6 +6,7 @@ namespace PinVandaag\PMarketAPI;
 
 use GuzzleHttp\Client;
 use PinVandaag\PMarketAPI\Client\APIClient;
+use PinVandaag\PMarketAPI\Model\FactoryModelSearchResult;
 use PinVandaag\PMarketAPI\Model\Merchant;
 use PinVandaag\PMarketAPI\Model\MerchantCategory;
 use PinVandaag\PMarketAPI\Model\MerchantCategoryRequest;
@@ -55,6 +56,24 @@ final class PMarketAPIClient
             ->setApiSecret($apiSecret);
 
         return $this;
+    }
+
+    public function searchFactoryModels(
+        int $pageNo = 1,
+        int $pageSize = 10,
+        ?string $orderBy = null,
+        ?string $factoryName = null,
+        ?string $modelName = null,
+        ?string $productType = null,
+    ): FactoryModelSearchResult {
+        return $this->apiClient->searchFactoryModels(
+            $pageNo,
+            $pageSize,
+            $orderBy,
+            $factoryName,
+            $modelName,
+            $productType,
+        );
     }
 
     public function searchMerchant(
