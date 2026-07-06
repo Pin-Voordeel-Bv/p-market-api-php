@@ -1370,4 +1370,21 @@ trait TerminalApiTrait
 
         return $this->deserializeTerminalSearchResult($response, $actionDescription);
     }
+
+    private function assertMoveTerminal(string $resellerName, string $merchantName): void
+    {
+        $validationErrors = [];
+
+        if (trim($resellerName) === '') {
+            $validationErrors[] = 'resellerName:may not be empty';
+        }
+
+        if (trim($merchantName) === '') {
+            $validationErrors[] = 'merchantName:may not be empty';
+        }
+
+        if ($validationErrors !== []) {
+            throw new PMarketAPIException(implode('; ', $validationErrors));
+        }
+    }
 }

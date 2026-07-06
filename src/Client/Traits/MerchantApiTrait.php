@@ -405,4 +405,26 @@ trait MerchantApiTrait
 
         return $this->deserializeMerchantSearchResult($response, $actionDescription);
     }
+
+    private function normalizeMerchantOrderBy(string $orderBy): string
+    {
+        return match ($orderBy) {
+            'Name' => 'name',
+            'Phone' => 'phone',
+            'Contact' => 'contact',
+            'name', 'phone', 'contact' => $orderBy,
+            default => throw new PMarketAPIException('orderBy must be one of Name, Phone, Contact, name, phone or contact.'),
+        };
+    }
+
+    private function normalizeMerchantStatus(string $status): string
+    {
+        return match ($status) {
+            'Active' => 'A',
+            'Inactive', 'Pending', 'Pendding' => 'P',
+            'Suspend' => 'S',
+            'A', 'P', 'S' => $status,
+            default => throw new PMarketAPIException('status must be one of Active, Inactive, Suspend, A, P or S.'),
+        };
+    }
 }
