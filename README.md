@@ -11,6 +11,7 @@ A PHP Wrapper for the <a href="https://github.com/PAXSTORE/paxstore-openapi-java
 - <a href="https://github.com/PAXSTORE/paxstore-openapi-java-sdk/blob/master/docs/MERCHANT_CATEGORY_API.md">MerchantCategory</a>
 - <a href="https://github.com/PAXSTORE/paxstore-openapi-java-sdk/blob/master/docs/RESELLER_API.md">Reseller</a>
 - <a href="https://github.com/PAXSTORE/paxstore-openapi-java-sdk/blob/master/docs/TERMINAL_API.md">Terminal</a>
+- <a href="https://github.com/PAXSTORE/paxstore-openapi-java-sdk/blob/master/docs/TERMINAL_FIRMWARE_API.md">TerminalFirmware</a>
 - <a href="https://github.com/PAXSTORE/paxstore-openapi-java-sdk/blob/master/docs/TERMINAL_GROUP_API.md">TerminalGroup</a>
 
 ## Small usage example

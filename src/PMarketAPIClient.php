@@ -6,6 +6,7 @@ namespace PinVandaag\PMarketAPI;
 
 use GuzzleHttp\Client;
 use PinVandaag\PMarketAPI\Client\APIClient;
+use PinVandaag\PMarketAPI\Model\DisablePushFirmwareTaskRequest;
 use PinVandaag\PMarketAPI\Model\FactoryModelSearchResult;
 use PinVandaag\PMarketAPI\Model\Merchant;
 use PinVandaag\PMarketAPI\Model\MerchantCategory;
@@ -13,6 +14,9 @@ use PinVandaag\PMarketAPI\Model\MerchantCategoryRequest;
 use PinVandaag\PMarketAPI\Model\MerchantCreateRequest;
 use PinVandaag\PMarketAPI\Model\MerchantSearchResult;
 use PinVandaag\PMarketAPI\Model\MerchantUpdateRequest;
+use PinVandaag\PMarketAPI\Model\PushFirmwareTask;
+use PinVandaag\PMarketAPI\Model\PushFirmwareTaskSearchResult;
+use PinVandaag\PMarketAPI\Model\PushFirmwareToTerminalRequest;
 use PinVandaag\PMarketAPI\Model\Reseller;
 use PinVandaag\PMarketAPI\Model\ResellerCreateRequest;
 use PinVandaag\PMarketAPI\Model\ResellerRkiKeySearchResult;
@@ -454,6 +458,46 @@ final class PMarketAPIClient
     public function downloadTerminalLogBySn(string $serialNo, int|string $terminalLogId): TerminalLogDownloadTask
     {
         return $this->apiClient->downloadTerminalLogBySn($serialNo, $terminalLogId);
+    }
+
+    public function pushFirmwareToTerminal(PushFirmwareToTerminalRequest $request): PushFirmwareTask
+    {
+        return $this->apiClient->pushFirmwareToTerminal($request);
+    }
+
+    public function searchPushFirmwareTasks(
+        int $pageNo = 1,
+        int $pageSize = 10,
+        ?string $orderBy = null,
+        ?string $terminalTid = null,
+        ?string $fmName = null,
+        ?string $status = null,
+        ?string $serialNo = null,
+    ): PushFirmwareTaskSearchResult {
+        return $this->apiClient->searchPushFirmwareTasks(
+            $pageNo,
+            $pageSize,
+            $orderBy,
+            $terminalTid,
+            $fmName,
+            $status,
+            $serialNo,
+        );
+    }
+
+    public function getPushFirmwareTask(int|string $pushFirmwareTaskId): PushFirmwareTask
+    {
+        return $this->apiClient->getPushFirmwareTask($pushFirmwareTaskId);
+    }
+
+    public function disablePushFirmwareTask(DisablePushFirmwareTaskRequest $request): bool
+    {
+        return $this->apiClient->disablePushFirmwareTask($request);
+    }
+
+    public function deleteTerminalFirmware(int|string $terminalFirmwareId): bool
+    {
+        return $this->apiClient->deleteTerminalFirmware($terminalFirmwareId);
     }
 
     public function searchTerminalGroup(
