@@ -385,8 +385,8 @@ trait TerminalApkApiTrait
     private function normalizeApkCreatedDateOrderBy(string $orderBy): string
     {
         return match ($orderBy) {
-            'CreatedDate_desc', 'createdDate_desc', 'createdDate DESC' => 'createdDate DESC',
-            'CreatedDate_asc', 'createdDate_asc', 'createdDate ASC' => 'createdDate ASC',
+            'CreatedDate_desc', 'createdDate_desc', 'createdDate DESC', 'a.created_date DESC' => 'a.created_date DESC',
+            'CreatedDate_asc', 'createdDate_asc', 'createdDate ASC', 'a.created_date ASC' => 'a.created_date ASC',
             default => throw new PMarketAPIException('orderBy must be one of CreatedDate_desc, CreatedDate_asc, createdDate DESC or createdDate ASC.'),
         };
     }
