@@ -8,6 +8,8 @@ use GuzzleHttp\Client;
 use PinVandaag\PMarketAPI\Client\APIClient;
 use PinVandaag\PMarketAPI\Model\CreateTerminalApkPartialParamRequest;
 use PinVandaag\PMarketAPI\Model\CreateTerminalApkRequest;
+use PinVandaag\PMarketAPI\Model\CreateTerminalGroupApkPartialParamRequest;
+use PinVandaag\PMarketAPI\Model\CreateTerminalGroupApkRequest;
 use PinVandaag\PMarketAPI\Model\DisablePushFirmwareTaskRequest;
 use PinVandaag\PMarketAPI\Model\EntityAttribute;
 use PinVandaag\PMarketAPI\Model\EntityAttributeCreateRequest;
@@ -35,6 +37,8 @@ use PinVandaag\PMarketAPI\Model\TerminalApkSearchResult;
 use PinVandaag\PMarketAPI\Model\TerminalCopyRequest;
 use PinVandaag\PMarketAPI\Model\TerminalCreateRequest;
 use PinVandaag\PMarketAPI\Model\TerminalGroup;
+use PinVandaag\PMarketAPI\Model\TerminalGroupApk;
+use PinVandaag\PMarketAPI\Model\TerminalGroupApkSearchResult;
 use PinVandaag\PMarketAPI\Model\TerminalGroupRequest;
 use PinVandaag\PMarketAPI\Model\TerminalGroupSearchResult;
 use PinVandaag\PMarketAPI\Model\TerminalLogDownloadTask;
@@ -661,5 +665,51 @@ final class PMarketAPIClient
     public function removeTerminalOutGroup(int|string $groupId, array $terminalIds): bool
     {
         return $this->apiClient->removeTerminalOutGroup($groupId, $terminalIds);
+    }
+
+    public function getTerminalGroupApk(int|string $groupApkId, array $pidList = []): TerminalGroupApk
+    {
+        return $this->apiClient->getTerminalGroupApk($groupApkId, $pidList);
+    }
+
+    public function searchTerminalGroupApk(
+        int $pageNo = 1,
+        int $pageSize = 10,
+        ?string $orderBy = null,
+        int|string|null $groupId = null,
+        ?bool $pendingOnly = null,
+        ?bool $historyOnly = null,
+        ?string $keyWords = null,
+    ): TerminalGroupApkSearchResult {
+        return $this->apiClient->searchTerminalGroupApk(
+            $pageNo,
+            $pageSize,
+            $orderBy,
+            $groupId,
+            $pendingOnly,
+            $historyOnly,
+            $keyWords,
+        );
+    }
+
+    public function createAndActiveGroupApk(CreateTerminalGroupApkRequest $request): TerminalGroupApk
+    {
+        return $this->apiClient->createAndActiveGroupApk($request);
+    }
+
+    public function createAndActiveGroupApkWithPartialParams(
+        CreateTerminalGroupApkPartialParamRequest $request,
+    ): TerminalGroupApk {
+        return $this->apiClient->createAndActiveGroupApkWithPartialParams($request);
+    }
+
+    public function suspendTerminalGroupApk(int|string $groupApkId): TerminalGroupApk
+    {
+        return $this->apiClient->suspendTerminalGroupApk($groupApkId);
+    }
+
+    public function deleteTerminalGroupApk(int|string $groupApkId): bool
+    {
+        return $this->apiClient->deleteTerminalGroupApk($groupApkId);
     }
 }

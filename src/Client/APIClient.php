@@ -14,6 +14,7 @@ use PinVandaag\PMarketAPI\Client\Traits\TerminalApiTrait;
 use PinVandaag\PMarketAPI\Client\Traits\TerminalApkApiTrait;
 use PinVandaag\PMarketAPI\Client\Traits\TerminalFirmwareApiTrait;
 use PinVandaag\PMarketAPI\Client\Traits\TerminalGroupApiTrait;
+use PinVandaag\PMarketAPI\Client\Traits\TerminalGroupApkApiTrait;
 use PinVandaag\PMarketAPI\Exception\PMarketAPIException;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Log\LoggerAwareTrait;
@@ -37,6 +38,7 @@ final class APIClient
     use TerminalApkApiTrait;
     use TerminalFirmwareApiTrait;
     use TerminalGroupApiTrait;
+    use TerminalGroupApkApiTrait;
 
     private readonly SerializerInterface $serializer;
     private ?string $apiKey = null;
