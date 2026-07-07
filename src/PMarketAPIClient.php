@@ -8,6 +8,9 @@ use GuzzleHttp\Client;
 use PinVandaag\PMarketAPI\Client\APIClient;
 use PinVandaag\PMarketAPI\Model\ApkParameter;
 use PinVandaag\PMarketAPI\Model\ApkParameterSearchResult;
+use PinVandaag\PMarketAPI\Model\ApkParamPid;
+use PinVandaag\PMarketAPI\Model\AppCost;
+use PinVandaag\PMarketAPI\Model\AppSearchResult;
 use PinVandaag\PMarketAPI\Model\CreateApkParameterRequest;
 use PinVandaag\PMarketAPI\Model\CreateTerminalApkPartialParamRequest;
 use PinVandaag\PMarketAPI\Model\CreateTerminalApkRequest;
@@ -83,6 +86,53 @@ final class PMarketAPIClient
             ->setApiSecret($apiSecret);
 
         return $this;
+    }
+
+    public function searchApp(
+        int $pageNo = 1,
+        int $pageSize = 10,
+        ?string $orderBy = null,
+        ?string $name = null,
+        ?string $osType = null,
+        ?string $chargeType = null,
+        ?string $baseType = null,
+        ?string $appStatus = null,
+        ?string $apkStatus = null,
+        ?bool $specificReseller = null,
+        ?bool $specificMerchantCategory = null,
+        ?bool $includeSubscribedApp = null,
+        ?string $resellerName = null,
+        ?string $modelName = null,
+    ): AppSearchResult {
+        return $this->apiClient->searchApp(
+            $pageNo,
+            $pageSize,
+            $orderBy,
+            $name,
+            $osType,
+            $chargeType,
+            $baseType,
+            $appStatus,
+            $apkStatus,
+            $specificReseller,
+            $specificMerchantCategory,
+            $includeSubscribedApp,
+            $resellerName,
+            $modelName,
+        );
+    }
+
+    public function getAppCost(int|string $resellerId, int|string $appId): AppCost
+    {
+        return $this->apiClient->getAppCost($resellerId, $appId);
+    }
+
+    public function searchApkParamPidList(
+        string $paramTemplateName,
+        string $packageName,
+        string $versionName,
+    ): ApkParamPid {
+        return $this->apiClient->searchApkParamPidList($paramTemplateName, $packageName, $versionName);
     }
 
     public function getEntityAttribute(int|string $attributeId): EntityAttribute
