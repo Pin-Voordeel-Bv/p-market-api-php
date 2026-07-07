@@ -6,6 +6,8 @@ namespace PinVandaag\PMarketAPI;
 
 use GuzzleHttp\Client;
 use PinVandaag\PMarketAPI\Client\APIClient;
+use PinVandaag\PMarketAPI\Model\CreateTerminalApkPartialParamRequest;
+use PinVandaag\PMarketAPI\Model\CreateTerminalApkRequest;
 use PinVandaag\PMarketAPI\Model\DisablePushFirmwareTaskRequest;
 use PinVandaag\PMarketAPI\Model\EntityAttribute;
 use PinVandaag\PMarketAPI\Model\EntityAttributeCreateRequest;
@@ -28,6 +30,8 @@ use PinVandaag\PMarketAPI\Model\ResellerRkiKeySearchResult;
 use PinVandaag\PMarketAPI\Model\ResellerSearchResult;
 use PinVandaag\PMarketAPI\Model\ResellerUpdateRequest;
 use PinVandaag\PMarketAPI\Model\Terminal;
+use PinVandaag\PMarketAPI\Model\TerminalApk;
+use PinVandaag\PMarketAPI\Model\TerminalApkSearchResult;
 use PinVandaag\PMarketAPI\Model\TerminalCopyRequest;
 use PinVandaag\PMarketAPI\Model\TerminalCreateRequest;
 use PinVandaag\PMarketAPI\Model\TerminalGroup;
@@ -40,6 +44,7 @@ use PinVandaag\PMarketAPI\Model\TerminalPed;
 use PinVandaag\PMarketAPI\Model\TerminalSearchResult;
 use PinVandaag\PMarketAPI\Model\TerminalSystemUsage;
 use PinVandaag\PMarketAPI\Model\TerminalUpdateRequest;
+use PinVandaag\PMarketAPI\Model\UpdateTerminalApkRequest;
 use Psr\Log\LoggerInterface;
 use SensitiveParameter;
 
@@ -502,6 +507,58 @@ final class PMarketAPIClient
     public function downloadTerminalLogBySn(string $serialNo, int|string $terminalLogId): TerminalLogDownloadTask
     {
         return $this->apiClient->downloadTerminalLogBySn($serialNo, $terminalLogId);
+    }
+
+    public function createTerminalApk(CreateTerminalApkRequest $request): TerminalApk
+    {
+        return $this->apiClient->createTerminalApk($request);
+    }
+
+    public function createTerminalApkWithPartialParams(CreateTerminalApkPartialParamRequest $request): TerminalApk
+    {
+        return $this->apiClient->createTerminalApkWithPartialParams($request);
+    }
+
+    public function searchTerminalApk(
+        int $pageNo = 1,
+        int $pageSize = 10,
+        ?string $orderBy = null,
+        ?string $terminalTid = null,
+        ?string $appPackageName = null,
+        ?string $status = null,
+        ?string $serialNo = null,
+        array $pidList = [],
+    ): TerminalApkSearchResult {
+        return $this->apiClient->searchTerminalApk(
+            $pageNo,
+            $pageSize,
+            $orderBy,
+            $terminalTid,
+            $appPackageName,
+            $status,
+            $serialNo,
+            $pidList,
+        );
+    }
+
+    public function getTerminalApk(int|string $terminalApkId, array $pidList = []): TerminalApk
+    {
+        return $this->apiClient->getTerminalApk($terminalApkId, $pidList);
+    }
+
+    public function disableApkPush(UpdateTerminalApkRequest $request): bool
+    {
+        return $this->apiClient->disableApkPush($request);
+    }
+
+    public function uninstallApk(UpdateTerminalApkRequest $request): bool
+    {
+        return $this->apiClient->uninstallApk($request);
+    }
+
+    public function deleteTerminalApk(int|string $terminalApkId): bool
+    {
+        return $this->apiClient->deleteTerminalApk($terminalApkId);
     }
 
     public function pushFirmwareToTerminal(PushFirmwareToTerminalRequest $request): PushFirmwareTask
