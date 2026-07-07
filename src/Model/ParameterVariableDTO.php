@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace PinVandaag\PMarketAPI\Model;
 
-final readonly class MerchantVariable
+final readonly class ParameterVariableDTO
 {
     public function __construct(
         public int|string|null $id = null,

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace PinVandaag\PMarketAPI\Model;
 
-final readonly class MerchantVariableSearchResult
+final readonly class ParameterVariableSearchResult
 {
     public function __construct(
         public int $pageNo = 1,

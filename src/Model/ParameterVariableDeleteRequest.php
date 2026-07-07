@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace PinVandaag\PMarketAPI\Model;
 
-final readonly class MerchantVariableDeleteRequest
+final readonly class ParameterVariableDeleteRequest
 {
     /**
      * @param array<int|string> $variableIds

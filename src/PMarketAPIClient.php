@@ -30,9 +30,10 @@ use PinVandaag\PMarketAPI\Model\MerchantCreateRequest;
 use PinVandaag\PMarketAPI\Model\MerchantSearchResult;
 use PinVandaag\PMarketAPI\Model\MerchantUpdateRequest;
 use PinVandaag\PMarketAPI\Model\MerchantVariableCreateRequest;
-use PinVandaag\PMarketAPI\Model\MerchantVariableDeleteRequest;
-use PinVandaag\PMarketAPI\Model\MerchantVariableSearchResult;
 use PinVandaag\PMarketAPI\Model\MerchantVariableUpdateRequest;
+use PinVandaag\PMarketAPI\Model\ParameterVariable;
+use PinVandaag\PMarketAPI\Model\ParameterVariableDeleteRequest;
+use PinVandaag\PMarketAPI\Model\ParameterVariableSearchResult;
 use PinVandaag\PMarketAPI\Model\PushFirmwareTask;
 use PinVandaag\PMarketAPI\Model\PushFirmwareTaskSearchResult;
 use PinVandaag\PMarketAPI\Model\PushFirmwareToTerminalRequest;
@@ -54,6 +55,7 @@ use PinVandaag\PMarketAPI\Model\TerminalGroupSearchResult;
 use PinVandaag\PMarketAPI\Model\TerminalLogDownloadTask;
 use PinVandaag\PMarketAPI\Model\TerminalLogSearchResult;
 use PinVandaag\PMarketAPI\Model\TerminalNetwork;
+use PinVandaag\PMarketAPI\Model\TerminalParameterVariableRequest;
 use PinVandaag\PMarketAPI\Model\TerminalPed;
 use PinVandaag\PMarketAPI\Model\TerminalSearchResult;
 use PinVandaag\PMarketAPI\Model\TerminalSystemUsage;
@@ -282,7 +284,7 @@ final class PMarketAPIClient
         ?string $packageName = null,
         ?string $key = null,
         ?string $source = null,
-    ): MerchantVariableSearchResult {
+    ): ParameterVariableSearchResult {
         return $this->apiClient->searchMerchantVariable(
             $pageNo,
             $pageSize,
@@ -315,7 +317,7 @@ final class PMarketAPIClient
     }
 
     public function batchDeletionMerchantVariable(
-        MerchantVariableDeleteRequest $request,
+        ParameterVariableDeleteRequest $request,
     ): bool {
         return $this->apiClient->batchDeletionMerchantVariable($request);
     }
@@ -857,5 +859,49 @@ final class PMarketAPIClient
     public function deleteTerminalGroupApk(int|string $groupApkId): bool
     {
         return $this->apiClient->deleteTerminalGroupApk($groupApkId);
+    }
+
+    public function getTerminalVariable(
+        int $pageNo = 1,
+        int $pageSize = 10,
+        ?string $orderBy = null,
+        ?string $tid = null,
+        ?string $serialNo = null,
+        ?string $packageName = null,
+        ?string $key = null,
+        ?string $source = null,
+    ): ParameterVariableSearchResult {
+        return $this->apiClient->getTerminalVariable(
+            $pageNo,
+            $pageSize,
+            $orderBy,
+            $tid,
+            $serialNo,
+            $packageName,
+            $key,
+            $source,
+        );
+    }
+
+    public function createTerminalVariable(TerminalParameterVariableRequest $request): bool
+    {
+        return $this->apiClient->createTerminalVariable($request);
+    }
+
+    public function updateTerminalVariable(
+        int|string $terminalVariableId,
+        ParameterVariable $request,
+    ): bool {
+        return $this->apiClient->updateTerminalVariable($terminalVariableId, $request);
+    }
+
+    public function deleteTerminalVariable(int|string $terminalVariableId): bool
+    {
+        return $this->apiClient->deleteTerminalVariable($terminalVariableId);
+    }
+
+    public function batchDeletionTerminalVariable(ParameterVariableDeleteRequest $request): bool
+    {
+        return $this->apiClient->batchDeletionTerminalVariable($request);
     }
 }

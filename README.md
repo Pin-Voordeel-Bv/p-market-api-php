@@ -19,6 +19,7 @@ A PHP Wrapper for the <a href="https://github.com/PAXSTORE/paxstore-openapi-java
 - <a href="https://github.com/PAXSTORE/paxstore-openapi-java-sdk/blob/master/docs/TERMINAL_FIRMWARE_API.md">TerminalFirmware</a>
 - <a href="https://github.com/PAXSTORE/paxstore-openapi-java-sdk/blob/master/docs/TERMINAL_GROUP_API.md">TerminalGroup</a>
 - <a href="https://github.com/PAXSTORE/paxstore-openapi-java-sdk/blob/master/docs/TERMINAL_GROUP_APK_API.md">TerminalGroupApk</a>
+- <a href="https://github.com/PAXSTORE/paxstore-openapi-java-sdk/blob/master/docs/TERMINAL_VARIABLE_API.md">TerminalVariable</a>
 
 ## Small usage example
 

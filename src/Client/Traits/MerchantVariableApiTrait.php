@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace PinVandaag\PMarketAPI\Client\Traits;
 
 use PinVandaag\PMarketAPI\Exception\PMarketAPIException;
-use PinVandaag\PMarketAPI\Model\MerchantVariable;
 use PinVandaag\PMarketAPI\Model\MerchantVariableCreateRequest;
-use PinVandaag\PMarketAPI\Model\MerchantVariableDeleteRequest;
-use PinVandaag\PMarketAPI\Model\MerchantVariableSearchResult;
 use PinVandaag\PMarketAPI\Model\MerchantVariableUpdateRequest;
+use PinVandaag\PMarketAPI\Model\ParameterVariableDTO;
+use PinVandaag\PMarketAPI\Model\ParameterVariableDeleteRequest;
+use PinVandaag\PMarketAPI\Model\ParameterVariableSearchResult;
 use Psr\Http\Message\ResponseInterface;
 
 trait MerchantVariableApiTrait
@@ -22,7 +22,7 @@ trait MerchantVariableApiTrait
         ?string $packageName = null,
         ?string $key = null,
         ?string $source = null,
-    ): MerchantVariableSearchResult {
+    ): ParameterVariableSearchResult {
         $this->assertPage($pageNo, $pageSize);
 
         if ($merchantId === null || (string) $merchantId === '') {
@@ -38,7 +38,7 @@ trait MerchantVariableApiTrait
         ];
 
         if ($orderBy !== null && $orderBy !== '') {
-            $query['orderBy'] = $this->normalizeMerchantVariableOrderBy($orderBy);
+            $query['orderBy'] = $this->normalizeParameterVariableOrderBy($orderBy);
         }
 
         if ($packageName !== null && $packageName !== '') {
@@ -50,7 +50,7 @@ trait MerchantVariableApiTrait
         }
 
         if ($source !== null && $source !== '') {
-            $query['source'] = $this->normalizeMerchantVariableSource($source);
+            $query['source'] = $this->normalizeParameterVariableSource($source);
         }
 
         $response = $this->request(
@@ -63,7 +63,7 @@ trait MerchantVariableApiTrait
             actionDescription: 'search P Market merchant variables',
         );
 
-        return $this->deserializeMerchantVariableSearchResult(
+        return $this->deserializeParameterVariableSearchResult(
             $response,
             'search P Market merchant variables',
         );
@@ -115,7 +115,7 @@ trait MerchantVariableApiTrait
         return true;
     }
 
-    public function batchDeletionMerchantVariable(MerchantVariableDeleteRequest $request): bool
+    public function batchDeletionMerchantVariable(ParameterVariableDeleteRequest $request): bool
     {
         if ($request->variableIds === []) {
             throw new PMarketAPIException('variableIds cannot be empty!');
@@ -134,10 +134,10 @@ trait MerchantVariableApiTrait
         return true;
     }
 
-    private function deserializeMerchantVariableSearchResult(
+    private function deserializeParameterVariableSearchResult(
         ResponseInterface $response,
         string $actionDescription,
-    ): MerchantVariableSearchResult {
+    ): ParameterVariableSearchResult {
         $statusCode = $response->getStatusCode();
         $body = (string) $response->getBody();
 
@@ -167,11 +167,11 @@ trait MerchantVariableApiTrait
         $variables = [];
         foreach (is_array($dataSet) ? $dataSet : [] as $variableData) {
             if (is_array($variableData)) {
-                $variables[] = $this->serializer->denormalize($variableData, MerchantVariable::class);
+                $variables[] = $this->serializer->denormalize($variableData, ParameterVariableDTO::class);
             }
         }
 
-        return new MerchantVariableSearchResult(
+        return new ParameterVariableSearchResult(
             pageNo: (int) ($pageInfo['pageNo'] ?? 1),
             limit: (int) ($pageInfo['limit'] ?? count($variables)),
             totalCount: isset($pageInfo['totalCount']) ? (int) $pageInfo['totalCount'] : count($variables),
@@ -257,7 +257,7 @@ trait MerchantVariableApiTrait
         }
 
         if ($type !== null && trim((string) $type) !== '') {
-            $this->normalizeMerchantVariableType((string) $type);
+            $this->normalizeParameterVariableType((string) $type);
         }
 
         if ($value !== null && mb_strlen((string) $value) > 5000) {
@@ -297,14 +297,14 @@ trait MerchantVariableApiTrait
 
         return array_filter([
             'packageName' => $packageName,
-            'type' => $type !== null && $type !== '' ? $this->normalizeMerchantVariableType((string) $type) : null,
+            'type' => $type !== null && $type !== '' ? $this->normalizeParameterVariableType((string) $type) : null,
             'key' => $key,
             'value' => $value,
             'remarks' => $remarks,
         ], static fn ($value): bool => $value !== null && $value !== '');
     }
 
-    private function normalizeMerchantVariableOrderBy(string $orderBy): string
+    private function normalizeParameterVariableOrderBy(string $orderBy): string
     {
         return match ($orderBy) {
             'Variable_asc', 'variable_asc', 'createdDate ASC' => 'createdDate ASC',
@@ -313,7 +313,7 @@ trait MerchantVariableApiTrait
         };
     }
 
-    private function normalizeMerchantVariableSource(string $source): string
+    private function normalizeParameterVariableSource(string $source): string
     {
         return match ($source) {
             'Market', 'market', 'M' => 'M',
@@ -322,7 +322,7 @@ trait MerchantVariableApiTrait
         };
     }
 
-    private function normalizeMerchantVariableType(string $type): string
+    private function normalizeParameterVariableType(string $type): string
     {
         return match ($type) {
             'Text', 'text', 'T' => 'T',
