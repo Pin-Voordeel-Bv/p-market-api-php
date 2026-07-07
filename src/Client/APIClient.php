@@ -12,6 +12,7 @@ use PinVandaag\PMarketAPI\Client\Traits\MerchantCategoryApiTrait;
 use PinVandaag\PMarketAPI\Client\Traits\ResellerApiTrait;
 use PinVandaag\PMarketAPI\Client\Traits\TerminalApiTrait;
 use PinVandaag\PMarketAPI\Client\Traits\TerminalApkApiTrait;
+use PinVandaag\PMarketAPI\Client\Traits\TerminalApkParameterApiTrait;
 use PinVandaag\PMarketAPI\Client\Traits\TerminalFirmwareApiTrait;
 use PinVandaag\PMarketAPI\Client\Traits\TerminalGroupApiTrait;
 use PinVandaag\PMarketAPI\Client\Traits\TerminalGroupApkApiTrait;
@@ -36,6 +37,7 @@ final class APIClient
     use ResellerApiTrait;
     use TerminalApiTrait;
     use TerminalApkApiTrait;
+    use TerminalApkParameterApiTrait;
     use TerminalFirmwareApiTrait;
     use TerminalGroupApiTrait;
     use TerminalGroupApkApiTrait;

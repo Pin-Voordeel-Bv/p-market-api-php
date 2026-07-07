@@ -6,6 +6,9 @@ namespace PinVandaag\PMarketAPI;
 
 use GuzzleHttp\Client;
 use PinVandaag\PMarketAPI\Client\APIClient;
+use PinVandaag\PMarketAPI\Model\ApkParameter;
+use PinVandaag\PMarketAPI\Model\ApkParameterSearchResult;
+use PinVandaag\PMarketAPI\Model\CreateApkParameterRequest;
 use PinVandaag\PMarketAPI\Model\CreateTerminalApkPartialParamRequest;
 use PinVandaag\PMarketAPI\Model\CreateTerminalApkRequest;
 use PinVandaag\PMarketAPI\Model\CreateTerminalGroupApkPartialParamRequest;
@@ -48,6 +51,7 @@ use PinVandaag\PMarketAPI\Model\TerminalPed;
 use PinVandaag\PMarketAPI\Model\TerminalSearchResult;
 use PinVandaag\PMarketAPI\Model\TerminalSystemUsage;
 use PinVandaag\PMarketAPI\Model\TerminalUpdateRequest;
+use PinVandaag\PMarketAPI\Model\UpdateApkParameterRequest;
 use PinVandaag\PMarketAPI\Model\UpdateTerminalApkRequest;
 use Psr\Log\LoggerInterface;
 use SensitiveParameter;
@@ -563,6 +567,48 @@ final class PMarketAPIClient
     public function deleteTerminalApk(int|string $terminalApkId): bool
     {
         return $this->apiClient->deleteTerminalApk($terminalApkId);
+    }
+
+    public function searchTerminalApkParameter(
+        int $pageNo = 1,
+        int $pageSize = 10,
+        ?string $orderBy = null,
+        ?string $templateName = null,
+        string $packageName = '',
+        string $versionName = '',
+    ): ApkParameterSearchResult {
+        return $this->apiClient->searchTerminalApkParameter(
+            $pageNo,
+            $pageSize,
+            $orderBy,
+            $templateName,
+            $packageName,
+            $versionName,
+        );
+    }
+
+    public function getTerminalApkParameter(
+        int|string $apkParameterId,
+        array $pidList = [],
+    ): ApkParameter {
+        return $this->apiClient->getTerminalApkParameter($apkParameterId, $pidList);
+    }
+
+    public function createApkParameter(CreateApkParameterRequest $request): bool
+    {
+        return $this->apiClient->createApkParameter($request);
+    }
+
+    public function updateApkParameter(
+        int|string $apkParameterId,
+        UpdateApkParameterRequest $request,
+    ): bool {
+        return $this->apiClient->updateApkParameter($apkParameterId, $request);
+    }
+
+    public function deleteApkParameter(int|string $apkParameterId): bool
+    {
+        return $this->apiClient->deleteApkParameter($apkParameterId);
     }
 
     public function pushFirmwareToTerminal(PushFirmwareToTerminalRequest $request): PushFirmwareTask
