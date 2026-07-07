@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace PinVandaag\PMarketAPI;
 
+use DateTimeInterface;
 use GuzzleHttp\Client;
 use PinVandaag\PMarketAPI\Client\APIClient;
 use PinVandaag\PMarketAPI\Model\ApkParameter;
@@ -31,6 +32,8 @@ use PinVandaag\PMarketAPI\Model\MerchantSearchResult;
 use PinVandaag\PMarketAPI\Model\MerchantUpdateRequest;
 use PinVandaag\PMarketAPI\Model\MerchantVariableCreateRequest;
 use PinVandaag\PMarketAPI\Model\MerchantVariableUpdateRequest;
+use PinVandaag\PMarketAPI\Model\OptimizedParameterPushHistorySearchResult;
+use PinVandaag\PMarketAPI\Model\ParameterPushHistorySearchResult;
 use PinVandaag\PMarketAPI\Model\ParameterVariable;
 use PinVandaag\PMarketAPI\Model\ParameterVariableDeleteRequest;
 use PinVandaag\PMarketAPI\Model\ParameterVariableSearchResult;
@@ -320,6 +323,78 @@ final class PMarketAPIClient
         ParameterVariableDeleteRequest $request,
     ): bool {
         return $this->apiClient->batchDeletionMerchantVariable($request);
+    }
+
+    public function searchParameterPushHistory(
+        int $pageNo = 1,
+        int $pageSize = 10,
+        ?string $packageName = null,
+        ?string $serialNo = null,
+        ?string $pushStatus = null,
+        DateTimeInterface|string|null $pushTime = null,
+    ): ParameterPushHistorySearchResult {
+        return $this->apiClient->searchParameterPushHistory(
+            $pageNo,
+            $pageSize,
+            $packageName,
+            $serialNo,
+            $pushStatus,
+            $pushTime,
+        );
+    }
+
+    public function searchLatestParameterPushHistory(
+        int $pageNo = 1,
+        int $pageSize = 10,
+        ?string $packageName = null,
+        ?string $serialNo = null,
+        ?string $pushStatus = null,
+        DateTimeInterface|string|null $pushTime = null,
+    ): ParameterPushHistorySearchResult {
+        return $this->apiClient->searchLatestParameterPushHistory(
+            $pageNo,
+            $pageSize,
+            $packageName,
+            $serialNo,
+            $pushStatus,
+            $pushTime,
+        );
+    }
+
+    public function searchOptimizedParameterPushHistory(
+        int $pageNo = 1,
+        int $pageSize = 10,
+        ?string $packageName = null,
+        ?string $serialNo = null,
+        ?string $pushStatus = null,
+        DateTimeInterface|string|null $pushTime = null,
+    ): OptimizedParameterPushHistorySearchResult {
+        return $this->apiClient->searchOptimizedParameterPushHistory(
+            $pageNo,
+            $pageSize,
+            $packageName,
+            $serialNo,
+            $pushStatus,
+            $pushTime,
+        );
+    }
+
+    public function searchLatestOptimizedParameterPushHistory(
+        int $pageNo = 1,
+        int $pageSize = 10,
+        ?string $packageName = null,
+        ?string $serialNo = null,
+        ?string $pushStatus = null,
+        DateTimeInterface|string|null $pushTime = null,
+    ): OptimizedParameterPushHistorySearchResult {
+        return $this->apiClient->searchLatestOptimizedParameterPushHistory(
+            $pageNo,
+            $pageSize,
+            $packageName,
+            $serialNo,
+            $pushStatus,
+            $pushTime,
+        );
     }
 
     public function searchReseller(

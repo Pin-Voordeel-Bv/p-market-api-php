@@ -11,6 +11,7 @@ use PinVandaag\PMarketAPI\Client\Traits\FactoryModelApiTrait;
 use PinVandaag\PMarketAPI\Client\Traits\MerchantApiTrait;
 use PinVandaag\PMarketAPI\Client\Traits\MerchantCategoryApiTrait;
 use PinVandaag\PMarketAPI\Client\Traits\MerchantVariableApiTrait;
+use PinVandaag\PMarketAPI\Client\Traits\PushHistoryApiTrait;
 use PinVandaag\PMarketAPI\Client\Traits\ResellerApiTrait;
 use PinVandaag\PMarketAPI\Client\Traits\TerminalApiTrait;
 use PinVandaag\PMarketAPI\Client\Traits\TerminalApkApiTrait;
@@ -39,6 +40,7 @@ final class APIClient
     use MerchantApiTrait;
     use MerchantCategoryApiTrait;
     use MerchantVariableApiTrait;
+    use PushHistoryApiTrait;
     use ResellerApiTrait;
     use TerminalApiTrait;
     use TerminalApkApiTrait;
