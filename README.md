@@ -11,6 +11,7 @@ A PHP Wrapper for the <a href="https://github.com/PAXSTORE/paxstore-openapi-java
 - <a href="https://github.com/PAXSTORE/paxstore-openapi-java-sdk/blob/master/docs/FACTORY_MODEL_API.md">FactoryModel</a>
 - <a href="https://github.com/PAXSTORE/paxstore-openapi-java-sdk/blob/master/docs/MERCHANT_API.md">Merchant</a>
 - <a href="https://github.com/PAXSTORE/paxstore-openapi-java-sdk/blob/master/docs/MERCHANT_CATEGORY_API.md">MerchantCategory</a>
+- <a href="https://github.com/PAXSTORE/paxstore-openapi-java-sdk/blob/master/docs/MERCHANT_VARIABLE_API.md">MerchantVariable</a>
 - <a href="https://github.com/PAXSTORE/paxstore-openapi-java-sdk/blob/master/docs/RESELLER_API.md">Reseller</a>
 - <a href="https://github.com/PAXSTORE/paxstore-openapi-java-sdk/blob/master/docs/TERMINAL_API.md">Terminal</a>
 - <a href="https://github.com/PAXSTORE/paxstore-openapi-java-sdk/blob/master/docs/TERMINAL_APK_API.md">TerminalApk</a>

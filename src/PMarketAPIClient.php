@@ -29,6 +29,10 @@ use PinVandaag\PMarketAPI\Model\MerchantCategoryRequest;
 use PinVandaag\PMarketAPI\Model\MerchantCreateRequest;
 use PinVandaag\PMarketAPI\Model\MerchantSearchResult;
 use PinVandaag\PMarketAPI\Model\MerchantUpdateRequest;
+use PinVandaag\PMarketAPI\Model\MerchantVariableCreateRequest;
+use PinVandaag\PMarketAPI\Model\MerchantVariableDeleteRequest;
+use PinVandaag\PMarketAPI\Model\MerchantVariableSearchResult;
+use PinVandaag\PMarketAPI\Model\MerchantVariableUpdateRequest;
 use PinVandaag\PMarketAPI\Model\PushFirmwareTask;
 use PinVandaag\PMarketAPI\Model\PushFirmwareTaskSearchResult;
 use PinVandaag\PMarketAPI\Model\PushFirmwareToTerminalRequest;
@@ -268,6 +272,52 @@ final class PMarketAPIClient
     public function batchCreateMerchantCategory(array $requests, bool $skipExist = false): array
     {
         return $this->apiClient->batchCreateMerchantCategory($requests, $skipExist);
+    }
+
+    public function searchMerchantVariable(
+        int $pageNo = 1,
+        int $pageSize = 10,
+        ?string $orderBy = null,
+        int|string|null $merchantId = null,
+        ?string $packageName = null,
+        ?string $key = null,
+        ?string $source = null,
+    ): MerchantVariableSearchResult {
+        return $this->apiClient->searchMerchantVariable(
+            $pageNo,
+            $pageSize,
+            $orderBy,
+            $merchantId,
+            $packageName,
+            $key,
+            $source,
+        );
+    }
+
+    public function createMerchantVariable(MerchantVariableCreateRequest $request): bool
+    {
+        return $this->apiClient->createMerchantVariable($request);
+    }
+
+    public function updateMerchantVariable(
+        int|string $merchantVariableId,
+        MerchantVariableUpdateRequest $request,
+    ): bool {
+        return $this->apiClient->updateMerchantVariable(
+            $merchantVariableId,
+            $request,
+        );
+    }
+
+    public function deleteMerchantVariable(int|string $merchantVariableId): bool
+    {
+        return $this->apiClient->deleteMerchantVariable($merchantVariableId);
+    }
+
+    public function batchDeletionMerchantVariable(
+        MerchantVariableDeleteRequest $request,
+    ): bool {
+        return $this->apiClient->batchDeletionMerchantVariable($request);
     }
 
     public function searchReseller(
