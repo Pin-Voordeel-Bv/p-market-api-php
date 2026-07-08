@@ -17,6 +17,7 @@ use PinVandaag\PMarketAPI\Model\CreateTerminalApkPartialParamRequest;
 use PinVandaag\PMarketAPI\Model\CreateTerminalApkRequest;
 use PinVandaag\PMarketAPI\Model\CreateTerminalGroupApkPartialParamRequest;
 use PinVandaag\PMarketAPI\Model\CreateTerminalGroupApkRequest;
+use PinVandaag\PMarketAPI\Model\CreateTerminalGroupRkiRequest;
 use PinVandaag\PMarketAPI\Model\DisablePushFirmwareTaskRequest;
 use PinVandaag\PMarketAPI\Model\DisablePushRkiTaskRequest;
 use PinVandaag\PMarketAPI\Model\EntityAttribute;
@@ -58,6 +59,8 @@ use PinVandaag\PMarketAPI\Model\TerminalGroup;
 use PinVandaag\PMarketAPI\Model\TerminalGroupApk;
 use PinVandaag\PMarketAPI\Model\TerminalGroupApkSearchResult;
 use PinVandaag\PMarketAPI\Model\TerminalGroupRequest;
+use PinVandaag\PMarketAPI\Model\TerminalGroupRki;
+use PinVandaag\PMarketAPI\Model\TerminalGroupRkiSearchResult;
 use PinVandaag\PMarketAPI\Model\TerminalGroupSearchResult;
 use PinVandaag\PMarketAPI\Model\TerminalLogDownloadTask;
 use PinVandaag\PMarketAPI\Model\TerminalLogSearchResult;
@@ -938,6 +941,41 @@ final class PMarketAPIClient
     public function deleteTerminalGroupApk(int|string $groupApkId): bool
     {
         return $this->apiClient->deleteTerminalGroupApk($groupApkId);
+    }
+
+    public function searchGroupPushRkiTask(
+        int $pageNo = 1,
+        int $pageSize = 10,
+        ?string $orderBy = null,
+        int|string|null $groupId = null,
+        ?bool $pendingOnly = null,
+        ?bool $historyOnly = null,
+        ?string $keyWords = null,
+    ): TerminalGroupRkiSearchResult {
+        return $this->apiClient->searchGroupPushRkiTask(
+            $pageNo,
+            $pageSize,
+            $orderBy,
+            $groupId,
+            $pendingOnly,
+            $historyOnly,
+            $keyWords,
+        );
+    }
+
+    public function getGroupPushRkiTask(int|string $groupPushRkiTaskId): TerminalGroupRki
+    {
+        return $this->apiClient->getGroupPushRkiTask($groupPushRkiTaskId);
+    }
+
+    public function pushRkiKey2Group(CreateTerminalGroupRkiRequest $request): TerminalGroupRki
+    {
+        return $this->apiClient->pushRkiKey2Group($request);
+    }
+
+    public function disableGroupRkiPushTask(int|string $groupPushRkiTaskId): TerminalGroupRki
+    {
+        return $this->apiClient->disableGroupRkiPushTask($groupPushRkiTaskId);
     }
 
     public function pushRkiKey2Terminal(PushRki2TerminalRequest $request): PushRkiTask

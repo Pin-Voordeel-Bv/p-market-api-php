@@ -19,6 +19,7 @@ use PinVandaag\PMarketAPI\Client\Traits\TerminalApkParameterApiTrait;
 use PinVandaag\PMarketAPI\Client\Traits\TerminalFirmwareApiTrait;
 use PinVandaag\PMarketAPI\Client\Traits\TerminalGroupApiTrait;
 use PinVandaag\PMarketAPI\Client\Traits\TerminalGroupApkApiTrait;
+use PinVandaag\PMarketAPI\Client\Traits\TerminalGroupRkiApiTrait;
 use PinVandaag\PMarketAPI\Client\Traits\TerminalRkiApiTrait;
 use PinVandaag\PMarketAPI\Client\Traits\TerminalVariableApiTrait;
 use PinVandaag\PMarketAPI\Exception\PMarketAPIException;
@@ -49,6 +50,7 @@ final class APIClient
     use TerminalFirmwareApiTrait;
     use TerminalGroupApiTrait;
     use TerminalGroupApkApiTrait;
+    use TerminalGroupRkiApiTrait;
     use TerminalRkiApiTrait;
     use TerminalVariableApiTrait;
 

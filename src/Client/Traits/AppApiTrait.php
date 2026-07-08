@@ -201,7 +201,7 @@ trait AppApiTrait
             'UpdatedDate_desc', 'updatedDate_desc', 'app.updated_date DESC' => 'app.updated_date DESC',
             'UpdatedDate_asc', 'updatedDate_asc', 'app.updated_date ASC' => 'app.updated_date ASC',
             default => throw new PMarketAPIException(
-                'orderBy must be one of AppName_desc, AppName_asc, Emial_desc, Emial_asc, UpdatedDate_desc or UpdatedDate_asc.'
+                'orderBy must be one of AppName_desc, AppName_asc, UpdatedDate_desc or UpdatedDate_asc.'
             ),
         };
     }
