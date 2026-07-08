@@ -797,6 +797,11 @@ final class PMarketAPIClient
         return $this->apiClient->deleteApkParameter($apkParameterId);
     }
 
+    public function verifyTerminalEstate(string $serialNo): bool
+    {
+        return $this->apiClient->verifyTerminalEstate($serialNo);
+    }
+
     public function pushFirmwareToTerminal(PushFirmwareToTerminalRequest $request): PushFirmwareTask
     {
         return $this->apiClient->pushFirmwareToTerminal($request);

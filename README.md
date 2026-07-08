@@ -17,6 +17,7 @@ A PHP Wrapper for the <a href="https://github.com/PAXSTORE/paxstore-openapi-java
 - <a href="https://github.com/PAXSTORE/paxstore-openapi-java-sdk/blob/master/docs/TERMINAL_API.md">Terminal</a>
 - <a href="https://github.com/PAXSTORE/paxstore-openapi-java-sdk/blob/master/docs/TERMINAL_APK_API.md">TerminalApk</a>
 - <a href="https://github.com/PAXSTORE/paxstore-openapi-java-sdk/blob/master/docs/TERMINAL_APK_PARAMETER_API.md">TerminalApkParameter</a>
+- <a href="https://github.com/PAXSTORE/paxstore-openapi-java-sdk/blob/master/docs/TERMINAL_ESTATE_API.md">TerminalEstate</a>
 - <a href="https://github.com/PAXSTORE/paxstore-openapi-java-sdk/blob/master/docs/TERMINAL_FIRMWARE_API.md">TerminalFirmware</a>
 - <a href="https://github.com/PAXSTORE/paxstore-openapi-java-sdk/blob/master/docs/TERMINAL_GEOFENCE_WHITELIST_API.md">TerminalGeoFenceWhiteList</a>
 - <a href="https://github.com/PAXSTORE/paxstore-openapi-java-sdk/blob/master/docs/TERMINAL_GROUP_API.md">TerminalGroup</a>

@@ -16,6 +16,7 @@ use PinVandaag\PMarketAPI\Client\Traits\ResellerApiTrait;
 use PinVandaag\PMarketAPI\Client\Traits\TerminalApiTrait;
 use PinVandaag\PMarketAPI\Client\Traits\TerminalApkApiTrait;
 use PinVandaag\PMarketAPI\Client\Traits\TerminalApkParameterApiTrait;
+use PinVandaag\PMarketAPI\Client\Traits\TerminalEstateApiTrait;
 use PinVandaag\PMarketAPI\Client\Traits\TerminalFirmwareApiTrait;
 use PinVandaag\PMarketAPI\Client\Traits\TerminalGeoFenceWhiteListApiTrait;
 use PinVandaag\PMarketAPI\Client\Traits\TerminalGroupApiTrait;
@@ -48,6 +49,7 @@ final class APIClient
     use TerminalApiTrait;
     use TerminalApkApiTrait;
     use TerminalApkParameterApiTrait;
+    use TerminalEstateApiTrait;
     use TerminalFirmwareApiTrait;
     use TerminalGeoFenceWhiteListApiTrait;
     use TerminalGroupApiTrait;
