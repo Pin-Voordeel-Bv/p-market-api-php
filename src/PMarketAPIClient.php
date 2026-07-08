@@ -55,6 +55,8 @@ use PinVandaag\PMarketAPI\Model\TerminalApk;
 use PinVandaag\PMarketAPI\Model\TerminalApkSearchResult;
 use PinVandaag\PMarketAPI\Model\TerminalCopyRequest;
 use PinVandaag\PMarketAPI\Model\TerminalCreateRequest;
+use PinVandaag\PMarketAPI\Model\TerminalGeoFenceWhiteListRequest;
+use PinVandaag\PMarketAPI\Model\TerminalGeoFenceWhiteListSearchResult;
 use PinVandaag\PMarketAPI\Model\TerminalGroup;
 use PinVandaag\PMarketAPI\Model\TerminalGroupApk;
 use PinVandaag\PMarketAPI\Model\TerminalGroupApkSearchResult;
@@ -833,6 +835,25 @@ final class PMarketAPIClient
     public function deleteTerminalFirmware(int|string $terminalFirmwareId): bool
     {
         return $this->apiClient->deleteTerminalFirmware($terminalFirmwareId);
+    }
+
+    public function searchGeoFenceWhiteList(
+        int $pageNo = 1,
+        int $pageSize = 10,
+        ?string $orderBy = null,
+        ?string $serialNo = null,
+    ): TerminalGeoFenceWhiteListSearchResult {
+        return $this->apiClient->searchGeoFenceWhiteList($pageNo, $pageSize, $orderBy, $serialNo);
+    }
+
+    public function createGeoFenceWhiteList(TerminalGeoFenceWhiteListRequest $request): bool
+    {
+        return $this->apiClient->createGeoFenceWhiteList($request);
+    }
+
+    public function deleteGeoFenceWhiteList(TerminalGeoFenceWhiteListRequest $request): bool
+    {
+        return $this->apiClient->deleteGeoFenceWhiteList($request);
     }
 
     public function searchTerminalGroup(
