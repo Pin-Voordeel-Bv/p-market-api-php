@@ -26,6 +26,7 @@ use PinVandaag\PMarketAPI\Model\EntityAttributeLabelUpdateRequest;
 use PinVandaag\PMarketAPI\Model\EntityAttributeSearchResult;
 use PinVandaag\PMarketAPI\Model\EntityAttributeUpdateRequest;
 use PinVandaag\PMarketAPI\Model\FactoryModelSearchResult;
+use PinVandaag\PMarketAPI\Model\GoInsightDataQueryResult;
 use PinVandaag\PMarketAPI\Model\Merchant;
 use PinVandaag\PMarketAPI\Model\MerchantCategory;
 use PinVandaag\PMarketAPI\Model\MerchantCategoryRequest;
@@ -207,6 +208,24 @@ final class PMarketAPIClient
             $factoryName,
             $modelName,
             $productType,
+        );
+    }
+
+    public function findDataFromInsight(
+        string $queryCode,
+        ?string $rangeType = null,
+        array $customFilterList = [],
+        ?int $pageNo = null,
+        ?int $pageSize = null,
+        string $timeZone = 'UTC',
+    ): GoInsightDataQueryResult {
+        return $this->apiClient->findDataFromInsight(
+            $queryCode,
+            $rangeType,
+            $customFilterList,
+            $pageNo,
+            $pageSize,
+            $timeZone,
         );
     }
 

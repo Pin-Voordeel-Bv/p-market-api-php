@@ -8,6 +8,7 @@ use GuzzleHttp\ClientInterface;
 use PinVandaag\PMarketAPI\Client\Traits\AppApiTrait;
 use PinVandaag\PMarketAPI\Client\Traits\EntityAttributeApiTrait;
 use PinVandaag\PMarketAPI\Client\Traits\FactoryModelApiTrait;
+use PinVandaag\PMarketAPI\Client\Traits\GoInsightApiTrait;
 use PinVandaag\PMarketAPI\Client\Traits\MerchantApiTrait;
 use PinVandaag\PMarketAPI\Client\Traits\MerchantCategoryApiTrait;
 use PinVandaag\PMarketAPI\Client\Traits\MerchantVariableApiTrait;
@@ -41,6 +42,7 @@ final class APIClient
     use AppApiTrait;
     use EntityAttributeApiTrait;
     use FactoryModelApiTrait;
+    use GoInsightApiTrait;
     use MerchantApiTrait;
     use MerchantCategoryApiTrait;
     use MerchantVariableApiTrait;
@@ -109,14 +111,14 @@ final class APIClient
         string $responseClass,
         string $actionDescription,
         array $query = [],
-        array $body = [],
+        array|object $body = [],
         array $headers = [],
     ): object {
         $options = [
             'headers' => $this->defaultHeaders() + $headers,
         ];
 
-        if ($body !== []) {
+        if ($body !== [] || is_object($body)) {
             $options['headers'] += ['Content-Type' => 'application/json'];
             $options['json'] = $body;
         }
@@ -200,7 +202,7 @@ final class APIClient
         string $responseClass,
         string $actionDescription,
         array $query = [],
-        array $body = [],
+        array|object $body = [],
         array $headers = [],
     ): object {
         return $this->resultData('POST', $endpoint, $responseClass, $actionDescription, $query, $body, $headers);
@@ -221,7 +223,7 @@ final class APIClient
         string $responseClass,
         string $actionDescription,
         array $query = [],
-        array $body = [],
+        array|object $body = [],
         array $headers = [],
     ): object {
         return $this->resultData('PUT', $endpoint, $responseClass, $actionDescription, $query, $body, $headers);
