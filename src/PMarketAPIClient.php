@@ -18,6 +18,7 @@ use PinVandaag\PMarketAPI\Model\CreateTerminalApkRequest;
 use PinVandaag\PMarketAPI\Model\CreateTerminalGroupApkPartialParamRequest;
 use PinVandaag\PMarketAPI\Model\CreateTerminalGroupApkRequest;
 use PinVandaag\PMarketAPI\Model\DisablePushFirmwareTaskRequest;
+use PinVandaag\PMarketAPI\Model\DisablePushRkiTaskRequest;
 use PinVandaag\PMarketAPI\Model\EntityAttribute;
 use PinVandaag\PMarketAPI\Model\EntityAttributeCreateRequest;
 use PinVandaag\PMarketAPI\Model\EntityAttributeLabelUpdateRequest;
@@ -40,6 +41,9 @@ use PinVandaag\PMarketAPI\Model\ParameterVariableSearchResult;
 use PinVandaag\PMarketAPI\Model\PushFirmwareTask;
 use PinVandaag\PMarketAPI\Model\PushFirmwareTaskSearchResult;
 use PinVandaag\PMarketAPI\Model\PushFirmwareToTerminalRequest;
+use PinVandaag\PMarketAPI\Model\PushRki2TerminalRequest;
+use PinVandaag\PMarketAPI\Model\PushRkiTask;
+use PinVandaag\PMarketAPI\Model\PushRkiTaskSearchResult;
 use PinVandaag\PMarketAPI\Model\Reseller;
 use PinVandaag\PMarketAPI\Model\ResellerCreateRequest;
 use PinVandaag\PMarketAPI\Model\ResellerRkiKeySearchResult;
@@ -934,6 +938,46 @@ final class PMarketAPIClient
     public function deleteTerminalGroupApk(int|string $groupApkId): bool
     {
         return $this->apiClient->deleteTerminalGroupApk($groupApkId);
+    }
+
+    public function pushRkiKey2Terminal(PushRki2TerminalRequest $request): PushRkiTask
+    {
+        return $this->apiClient->pushRkiKey2Terminal($request);
+    }
+
+    public function searchPushRkiTasks(
+        int $pageNo = 1,
+        int $pageSize = 10,
+        ?string $orderBy = null,
+        ?string $terminalTid = null,
+        ?string $rkiKey = null,
+        ?string $status = null,
+        ?string $serialNo = null,
+    ): PushRkiTaskSearchResult {
+        return $this->apiClient->searchPushRkiTasks(
+            $pageNo,
+            $pageSize,
+            $orderBy,
+            $terminalTid,
+            $rkiKey,
+            $status,
+            $serialNo,
+        );
+    }
+
+    public function getPushRkiTask(int|string $pushRkiTaskId): PushRkiTask
+    {
+        return $this->apiClient->getPushRkiTask($pushRkiTaskId);
+    }
+
+    public function disablePushRkiTask(DisablePushRkiTaskRequest $request): bool
+    {
+        return $this->apiClient->disablePushRkiTask($request);
+    }
+
+    public function deleteTerminalRki(int|string $terminalRkiId): bool
+    {
+        return $this->apiClient->deleteTerminalRki($terminalRkiId);
     }
 
     public function getTerminalVariable(
