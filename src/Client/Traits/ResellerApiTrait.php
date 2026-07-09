@@ -303,7 +303,7 @@ trait ResellerApiTrait
         foreach ([
             'name' => $request->name,
             'email' => $request->email,
-            'country' => $request->country,
+            'country' => $this->normalizeCountryCode($request->country),
             'contact' => $request->contact,
             'phone' => $request->phone,
         ] as $field => $value) {
@@ -329,7 +329,7 @@ trait ResellerApiTrait
 
         foreach ([
             'name' => $request->name,
-            'country' => $request->country,
+            'country' => $this->normalizeCountryCode($request->country),
             'contact' => $request->contact,
             'phone' => $request->phone,
         ] as $field => $value) {
@@ -378,7 +378,7 @@ trait ResellerApiTrait
         return array_filter([
             'name' => $request->name,
             'email' => $request->email,
-            'country' => $request->country,
+            'country' => $this->normalizeCountryCode($request->country),
             'contact' => $request->contact,
             'phone' => $request->phone,
             'postcode' => $request->postcode,
@@ -395,7 +395,7 @@ trait ResellerApiTrait
         return array_filter([
             'name' => $request->name,
             'email' => $request->email,
-            'country' => $request->country,
+            'country' => $this->normalizeCountryCode($request->country),
             'contact' => $request->contact,
             'phone' => $request->phone,
             'postcode' => $request->postcode,

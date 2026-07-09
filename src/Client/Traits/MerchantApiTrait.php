@@ -9,6 +9,7 @@ use PinVandaag\PMarketAPI\Model\Merchant;
 use PinVandaag\PMarketAPI\Model\MerchantCreateRequest;
 use PinVandaag\PMarketAPI\Model\MerchantSearchResult;
 use PinVandaag\PMarketAPI\Model\MerchantUpdateRequest;
+use PinVandaag\PMarketAPI\Model\PMarketCountryCode;
 use Psr\Http\Message\ResponseInterface;
 
 trait MerchantApiTrait
@@ -159,7 +160,7 @@ trait MerchantApiTrait
             'email' => $request->email,
             'resellerName' => $request->resellerName,
             'contact' => $request->contact,
-            'country' => $request->country,
+            'country' => $this->normalizeCountryCode($request->country),
             'phone' => $request->phone,
             'province' => $request->province,
             'city' => $request->city,
@@ -259,7 +260,7 @@ trait MerchantApiTrait
             'email' => $request->email,
             'resellerName' => $request->resellerName,
             'contact' => $request->contact,
-            'country' => $request->country,
+            'country' => $this->normalizeCountryCode($request->country),
             'phone' => $request->phone,
             'province' => $request->province,
             'city' => $request->city,
@@ -426,5 +427,23 @@ trait MerchantApiTrait
             'A', 'P', 'S' => $status,
             default => throw new PMarketAPIException('status must be one of Active, Inactive, Suspend, A, P or S.'),
         };
+    }
+
+    private function normalizeCountryCode(string $countryCode): string
+    {
+        $countryCode = strtoupper(trim($countryCode));
+
+        if ($countryCode === '') {
+            throw new PMarketAPIException('country cannot be null!');
+        }
+
+        if (!PMarketCountryCode::isValid($countryCode)) {
+            throw new PMarketAPIException(sprintf(
+                'country must be one of %s.',
+                implode(', ', PMarketCountryCode::all())
+            ));
+        }
+
+        return $countryCode;
     }
 }
