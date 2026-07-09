@@ -99,19 +99,6 @@ trait TerminalGroupRkiApiTrait
         );
     }
 
-    public function deleteGroupRkiPushTask(int|string $groupPushRkiTaskId): bool
-    {
-        $groupPushRkiTaskId = $this->assertPositiveInteger($groupPushRkiTaskId, 'groupPushRkiTaskId');
-
-        $this->emptyResult(
-            method: 'GET',
-            endpoint: sprintf('/v1/3rdsys/terminalGroupRki/%s', rawurlencode((string) $groupPushRkiTaskId)),
-            actionDescription: sprintf('delete P Market terminal group RKI task "%s"', $groupPushRkiTaskId),
-        );
-
-        return true;
-    }
-
     private function assertCreateTerminalGroupRkiRequest(CreateTerminalGroupRkiRequest $request): void
     {
         $errors = [];
