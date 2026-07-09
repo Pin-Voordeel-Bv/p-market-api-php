@@ -1284,6 +1284,11 @@ final class PMarketAPIClient
         return $this->apiClient->disableGroupRkiPushTask($groupPushRkiTaskId);
     }
 
+    public function deleteGroupRkiPushTask(int|string $groupPushRkiTaskId): bool
+    {
+        return $this->apiClient->deleteGroupRkiPushTask($groupPushRkiTaskId);
+    }
+
     public function pushRkiKey2Terminal(PushRki2TerminalRequest $request): PushRkiTask
     {
         return $this->apiClient->pushRkiKey2Terminal($request);
