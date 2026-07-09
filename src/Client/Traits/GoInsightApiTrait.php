@@ -61,7 +61,7 @@ trait GoInsightApiTrait
             actionDescription: sprintf('find P Market GoInsight data "%s"', $queryCode),
             headers: [
                 'Content-Type' => 'application/json',
-                'Time-Zone' => $timeZone,
+                'Time-Zone' => $this->normalizeTimeZone($timeZone),
             ],
             body: $body,
         );
@@ -148,5 +148,23 @@ trait GoInsightApiTrait
 
             default => throw new PMarketAPIException('Invalid GoInsight rangeType.'),
         };
+    }
+
+    private function normalizeTimeZone(string $timeZone): string
+    {
+        $timeZone = trim($timeZone);
+
+        if ($timeZone === '') {
+            return 'UTC';
+        }
+
+        if (!in_array($timeZone, \DateTimeZone::listIdentifiers(), true)) {
+            throw new PMarketAPIException(sprintf(
+                'Invalid timeZone "%s".',
+                $timeZone,
+            ));
+        }
+
+        return $timeZone;
     }
 }

@@ -303,13 +303,18 @@ trait ResellerApiTrait
         foreach ([
             'name' => $request->name,
             'email' => $request->email,
-            'country' => $this->normalizeCountryCode($request->country),
+            'country' => $request->country,
             'contact' => $request->contact,
             'phone' => $request->phone,
         ] as $field => $value) {
             if (trim($value) === '') {
                 $errors[] = sprintf('%s:may not be empty', $field);
             }
+        }
+
+        // validate country code once
+        if (trim($request->country) !== '') {
+            $this->normalizeCountryCode($request->country);
         }
 
         $this->assertResellerCommonLengths($request, $errors);
@@ -329,13 +334,18 @@ trait ResellerApiTrait
 
         foreach ([
             'name' => $request->name,
-            'country' => $this->normalizeCountryCode($request->country),
+            'country' => $request->country,
             'contact' => $request->contact,
             'phone' => $request->phone,
         ] as $field => $value) {
             if (trim($value) === '') {
                 $errors[] = sprintf('%s:may not be empty', $field);
             }
+        }
+
+        // validate country code once
+        if (trim($request->country) !== '') {
+            $this->normalizeCountryCode($request->country);
         }
 
         $this->assertResellerCommonLengths($request, $errors);

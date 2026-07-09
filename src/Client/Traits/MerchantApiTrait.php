@@ -121,6 +121,10 @@ trait MerchantApiTrait
             $validationErrors[] = 'country:length must be between 0 and 64';
         }
 
+        if ($request->country !== null && trim($request->country) !== '') {
+            $this->normalizeCountryCode($request->country);
+        }
+
         if ($request->phone !== null && mb_strlen($request->phone) > 32) {
             $validationErrors[] = 'phone:length must be between 0 and 32';
         }
@@ -222,6 +226,10 @@ trait MerchantApiTrait
 
         if ($request->country !== null && mb_strlen($request->country) > 64) {
             $validationErrors[] = 'country:length must be between 0 and 64';
+        }
+
+        if ($request->country !== null && trim($request->country) !== '') {
+            $this->normalizeCountryCode($request->country);
         }
 
         if ($request->phone !== null && mb_strlen($request->phone) > 32) {
