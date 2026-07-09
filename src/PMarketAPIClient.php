@@ -18,8 +18,30 @@ use PinVandaag\PMarketAPI\Model\CreateTerminalApkRequest;
 use PinVandaag\PMarketAPI\Model\CreateTerminalGroupApkPartialParamRequest;
 use PinVandaag\PMarketAPI\Model\CreateTerminalGroupApkRequest;
 use PinVandaag\PMarketAPI\Model\CreateTerminalGroupRkiRequest;
+use PinVandaag\PMarketAPI\Model\DeviceEmmPolicyCreateRequest;
 use PinVandaag\PMarketAPI\Model\DisablePushFirmwareTaskRequest;
 use PinVandaag\PMarketAPI\Model\DisablePushRkiTaskRequest;
+use PinVandaag\PMarketAPI\Model\EmmApp;
+use PinVandaag\PMarketAPI\Model\EmmAppAvailableTestVersionList;
+use PinVandaag\PMarketAPI\Model\EmmAppCreateRequest;
+use PinVandaag\PMarketAPI\Model\EmmAppDetail;
+use PinVandaag\PMarketAPI\Model\EmmAppPermission;
+use PinVandaag\PMarketAPI\Model\EmmAppSearchResult;
+use PinVandaag\PMarketAPI\Model\EmmDeviceBatchDeleteRequest;
+use PinVandaag\PMarketAPI\Model\EmmDeviceBatchMoveRequest;
+use PinVandaag\PMarketAPI\Model\EmmDeviceDetail;
+use PinVandaag\PMarketAPI\Model\EmmDeviceLostModeRequest;
+use PinVandaag\PMarketAPI\Model\EmmDeviceRegisterQRCodeCreate;
+use PinVandaag\PMarketAPI\Model\EmmDeviceRegisterQRCodeCreateRequest;
+use PinVandaag\PMarketAPI\Model\EmmDeviceResetPasswordRequest;
+use PinVandaag\PMarketAPI\Model\EmmDeviceSearchResult;
+use PinVandaag\PMarketAPI\Model\EmmDeviceUpdateRequest;
+use PinVandaag\PMarketAPI\Model\EmmDeviceDashboardDetailSearchResult;
+use PinVandaag\PMarketAPI\Model\EmmDeviceDashboardMonitor;
+use PinVandaag\PMarketAPI\Model\EmmDeviceInstalledAppSearchResult;
+use PinVandaag\PMarketAPI\Model\EmmDeviceLocation;
+use PinVandaag\PMarketAPI\Model\EmmPolicy;
+use PinVandaag\PMarketAPI\Model\EmmZteQuickUploadRecordCreateRequest;
 use PinVandaag\PMarketAPI\Model\EntityAttribute;
 use PinVandaag\PMarketAPI\Model\EntityAttributeCreateRequest;
 use PinVandaag\PMarketAPI\Model\EntityAttributeLabelUpdateRequest;
@@ -31,6 +53,7 @@ use PinVandaag\PMarketAPI\Model\Merchant;
 use PinVandaag\PMarketAPI\Model\MerchantCategory;
 use PinVandaag\PMarketAPI\Model\MerchantCategoryRequest;
 use PinVandaag\PMarketAPI\Model\MerchantCreateRequest;
+use PinVandaag\PMarketAPI\Model\MerchantEmmPolicyCreateRequest;
 use PinVandaag\PMarketAPI\Model\MerchantSearchResult;
 use PinVandaag\PMarketAPI\Model\MerchantUpdateRequest;
 use PinVandaag\PMarketAPI\Model\MerchantVariableCreateRequest;
@@ -48,9 +71,11 @@ use PinVandaag\PMarketAPI\Model\PushRkiTask;
 use PinVandaag\PMarketAPI\Model\PushRkiTaskSearchResult;
 use PinVandaag\PMarketAPI\Model\Reseller;
 use PinVandaag\PMarketAPI\Model\ResellerCreateRequest;
+use PinVandaag\PMarketAPI\Model\ResellerEmmPolicyCreateRequest;
 use PinVandaag\PMarketAPI\Model\ResellerRkiKeySearchResult;
 use PinVandaag\PMarketAPI\Model\ResellerSearchResult;
 use PinVandaag\PMarketAPI\Model\ResellerUpdateRequest;
+use PinVandaag\PMarketAPI\Model\SubscribeEmmAppSearchResult;
 use PinVandaag\PMarketAPI\Model\Terminal;
 use PinVandaag\PMarketAPI\Model\TerminalApk;
 use PinVandaag\PMarketAPI\Model\TerminalApkSearchResult;
@@ -152,6 +177,242 @@ final class PMarketAPIClient
         string $versionName,
     ): ApkParamPid {
         return $this->apiClient->searchApkParamPidList($paramTemplateName, $packageName, $versionName);
+    }
+
+    public function searchEmmApp(
+        int $pageNo = 1,
+        int $pageSize = 10,
+        ?string $orderBy = null,
+        string $resellerName = '',
+        ?string $keyWords = null,
+        ?string $type = null,
+    ): EmmAppSearchResult {
+        return $this->apiClient->searchEmmApp(
+            $pageNo,
+            $pageSize,
+            $orderBy,
+            $resellerName,
+            $keyWords,
+            $type,
+        );
+    }
+
+    public function createEmmApp(EmmAppCreateRequest $request): EmmApp
+    {
+        return $this->apiClient->createEmmApp($request);
+    }
+
+    public function getEmmAppDetail(int|string $appId): EmmAppDetail
+    {
+        return $this->apiClient->getEmmAppDetail($appId);
+    }
+
+    public function removeEmmApp(int|string $appId, string $resellerName): bool
+    {
+        return $this->apiClient->removeEmmApp($appId, $resellerName);
+    }
+
+    public function searchSubscribeEmmApp(
+        int $pageNo = 1,
+        int $pageSize = 10,
+        ?string $name = null,
+        ?bool $isSubscribed = null,
+    ): SubscribeEmmAppSearchResult {
+        return $this->apiClient->searchSubscribeEmmApp($pageNo, $pageSize, $name, $isSubscribed);
+    }
+
+    public function subscribeEmmApp(int|string $appId): bool
+    {
+        return $this->apiClient->subscribeEmmApp($appId);
+    }
+
+    public function unSubscribeEmmApp(int|string $appId): bool
+    {
+        return $this->apiClient->unSubscribeEmmApp($appId);
+    }
+
+    public function getEmmAppPermissionList(int|string $appId): EmmAppPermission
+    {
+        return $this->apiClient->getEmmAppPermissionList($appId);
+    }
+
+    public function getAvailableTestTrackVersionList(int|string $appId): EmmAppAvailableTestVersionList
+    {
+        return $this->apiClient->getAvailableTestTrackVersionList($appId);
+    }
+
+    public function createRegisterQRCode(EmmDeviceRegisterQRCodeCreateRequest $request): EmmDeviceRegisterQRCodeCreate
+    {
+        return $this->apiClient->createRegisterQRCode($request);
+    }
+
+    public function searchEmmDevice(
+        int $pageNo = 1,
+        int $pageSize = 10,
+        ?string $orderBy = null,
+        ?string $name = null,
+        ?string $serialNo = null,
+        ?string $mfrName = null,
+        ?string $modelName = null,
+        ?string $resellerName = null,
+        ?string $merchantName = null,
+        ?string $status = null,
+        ?string $iccId = null,
+        ?string $imei = null,
+    ): EmmDeviceSearchResult {
+        return $this->apiClient->searchEmmDevice(
+            $pageNo,
+            $pageSize,
+            $orderBy,
+            $name,
+            $serialNo,
+            $mfrName,
+            $modelName,
+            $resellerName,
+            $merchantName,
+            $status,
+            $iccId,
+            $imei,
+        );
+    }
+
+    public function getEmmDevice(int|string $deviceId): EmmDeviceDetail
+    {
+        return $this->apiClient->getEmmDevice($deviceId);
+    }
+
+    public function updateEmmDevice(int|string $deviceId, EmmDeviceUpdateRequest $request): bool
+    {
+        return $this->apiClient->updateEmmDevice($deviceId, $request);
+    }
+
+    public function batchMoveEmmDevice(EmmDeviceBatchMoveRequest $request): bool
+    {
+        return $this->apiClient->batchMoveEmmDevice($request);
+    }
+
+    public function deleteEmmDevice(int|string $deviceId): bool
+    {
+        return $this->apiClient->deleteEmmDevice($deviceId);
+    }
+
+    public function batchDeleteEmmDevice(EmmDeviceBatchDeleteRequest $request): bool
+    {
+        return $this->apiClient->batchDeleteEmmDevice($request);
+    }
+
+    public function rebootEmmDevice(int|string $deviceId): bool
+    {
+        return $this->apiClient->rebootEmmDevice($deviceId);
+    }
+
+    public function lockEmmDeviceScreen(int|string $deviceId): bool
+    {
+        return $this->apiClient->lockEmmDeviceScreen($deviceId);
+    }
+
+    public function resetEmmDevicePassword(
+        int|string $deviceId,
+        EmmDeviceResetPasswordRequest $request,
+    ): bool {
+        return $this->apiClient->resetEmmDevicePassword($deviceId, $request);
+    }
+
+    public function startEmmDeviceLostMode(
+        int|string $deviceId,
+        EmmDeviceLostModeRequest $request,
+    ): bool {
+        return $this->apiClient->startEmmDeviceLostMode($deviceId, $request);
+    }
+
+    public function resumeEmmDevice(int|string $deviceId): bool
+    {
+        return $this->apiClient->resumeEmmDevice($deviceId);
+    }
+
+    public function disableEmmDevice(int|string $deviceId): bool
+    {
+        return $this->apiClient->disableEmmDevice($deviceId);
+    }
+
+    public function syncDeviceDetail(int|string $deviceId): bool
+    {
+        return $this->apiClient->syncDeviceDetail($deviceId);
+    }
+
+    public function stopEmmDeviceLostMode(int|string $deviceId): bool
+    {
+        return $this->apiClient->stopEmmDeviceLostMode($deviceId);
+    }
+
+    public function clearEmmAppData(int|string $deviceId, string $installedAppIds): bool
+    {
+        return $this->apiClient->clearEmmAppData($deviceId, $installedAppIds);
+    }
+
+    public function submitEmmZteQuickUploadRecord(EmmZteQuickUploadRecordCreateRequest $request): bool
+    {
+        return $this->apiClient->submitEmmZteQuickUploadRecord($request);
+    }
+
+    public function getEmmDeviceDashboardDetail(
+        int|string $deviceId,
+    ): EmmDeviceDashboardDetailSearchResult {
+        return $this->apiClient->getEmmDeviceDashboardDetail($deviceId);
+    }
+
+    public function getEmmDeviceDashboardMonitor(int|string $deviceId): EmmDeviceDashboardMonitor
+    {
+        return $this->apiClient->getEmmDeviceDashboardMonitor($deviceId);
+    }
+
+    public function searchDeviceInstalledApp(
+        int $pageNo = 1,
+        int $pageSize = 10,
+        ?string $orderBy = null,
+        int|string|null $deviceId = null,
+    ): EmmDeviceInstalledAppSearchResult {
+        return $this->apiClient->searchDeviceInstalledApp(
+            $pageNo,
+            $pageSize,
+            $orderBy,
+            $deviceId,
+        );
+    }
+
+    public function getEmmDeviceLocation(int|string $deviceId): EmmDeviceLocation
+    {
+        return $this->apiClient->getEmmDeviceLocation($deviceId);
+    }
+
+    public function getResellerEmmPolicy(string $resellerName): EmmPolicy
+    {
+        return $this->apiClient->getResellerEmmPolicy($resellerName);
+    }
+
+    public function createResellerEmmPolicy(ResellerEmmPolicyCreateRequest $request): bool
+    {
+        return $this->apiClient->createResellerEmmPolicy($request);
+    }
+
+    public function getMerchantEmmPolicy(string $resellerName, string $merchantName): EmmPolicy
+    {
+        return $this->apiClient->getMerchantEmmPolicy($resellerName, $merchantName);
+    }
+
+    public function createMerchantEmmPolicy(MerchantEmmPolicyCreateRequest $request): bool
+    {
+        return $this->apiClient->createMerchantEmmPolicy($request);
+    }
+
+    public function getDeviceEmmPolicy(string $serialNo): EmmPolicy
+    {
+        return $this->apiClient->getDeviceEmmPolicy($serialNo);
+    }
+
+    public function createDeviceEmmPolicy(DeviceEmmPolicyCreateRequest $request): bool
+    {
+        return $this->apiClient->createDeviceEmmPolicy($request);
     }
 
     public function getEntityAttribute(int|string $attributeId): EntityAttribute

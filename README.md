@@ -7,8 +7,12 @@ A PHP Wrapper for the <a href="https://github.com/PAXSTORE/paxstore-openapi-java
 ## Implemented
 
 - <a href="https://github.com/PAXSTORE/paxstore-openapi-java-sdk/blob/master/docs/APP_API.md">Application</a>
+- <a href="https://github.com/PAXSTORE/paxstore-openapi-java-sdk/blob/master/docs/EMM_APP_API.md">EMM Application</a>
+- <a href="https://github.com/PAXSTORE/paxstore-openapi-java-sdk/blob/master/docs/EMM_DEVICE_API.md">EMM Device</a>
+- <a href="https://github.com/PAXSTORE/paxstore-openapi-java-sdk/blob/master/docs/EMM_DEVICE_DETAIL_API.md">EMM Device Detail</a>
+- <a href="https://github.com/PAXSTORE/paxstore-openapi-java-sdk/blob/master/docs/EMM_POLICY_API.md">EMM Policy</a>
 - <a href="https://github.com/PAXSTORE/paxstore-openapi-java-sdk/blob/master/docs/ENTITY_ATTRIBUTE_API.md">EntityAttribute</a>
-- <a href="https://github.com/PAXSTORE/paxstore-openapi-java-sdk/blob/master/docs/FACTORY_MODEL_API.md">FactoryModel</a>
+- <a href="https://github.com/PAXSTORE/paxstore-openapi-java-sdk/blob/master/docs/FACTORY_MODEL_API.md">Factory Model</a>
 - <a href="https://github.com/PAXSTORE/paxstore-openapi-java-sdk/blob/master/docs/GOINSIGHT_API.md">GoInsight</a>
 - <a href="https://github.com/PAXSTORE/paxstore-openapi-java-sdk/blob/master/docs/MERCHANT_API.md">Merchant</a>
 - <a href="https://github.com/PAXSTORE/paxstore-openapi-java-sdk/blob/master/docs/MERCHANT_CATEGORY_API.md">MerchantCategory</a>
@@ -18,7 +22,7 @@ A PHP Wrapper for the <a href="https://github.com/PAXSTORE/paxstore-openapi-java
 - <a href="https://github.com/PAXSTORE/paxstore-openapi-java-sdk/blob/master/docs/TERMINAL_API.md">Terminal</a>
 - <a href="https://github.com/PAXSTORE/paxstore-openapi-java-sdk/blob/master/docs/TERMINAL_APK_API.md">TerminalApk</a>
 - <a href="https://github.com/PAXSTORE/paxstore-openapi-java-sdk/blob/master/docs/TERMINAL_APK_PARAMETER_API.md">TerminalApkParameter</a>
-- <a href="https://github.com/PAXSTORE/paxstore-openapi-java-sdk/blob/master/docs/TERMINAL_ESTATE_API.md">TerminalEstate</a>
+- <a href="https://github.com/PAXSTORE/paxstore-openapi-java-sdk/blob/master/docs/TERMINAL_ESTATE_API.md">Terminal Estate</a>
 - <a href="https://github.com/PAXSTORE/paxstore-openapi-java-sdk/blob/master/docs/TERMINAL_FIRMWARE_API.md">TerminalFirmware</a>
 - <a href="https://github.com/PAXSTORE/paxstore-openapi-java-sdk/blob/master/docs/TERMINAL_GEOFENCE_WHITELIST_API.md">TerminalGeoFenceWhiteList</a>
 - <a href="https://github.com/PAXSTORE/paxstore-openapi-java-sdk/blob/master/docs/TERMINAL_GROUP_API.md">TerminalGroup</a>

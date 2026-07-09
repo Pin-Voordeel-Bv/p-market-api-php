@@ -6,6 +6,10 @@ namespace PinVandaag\PMarketAPI\Client;
 
 use GuzzleHttp\ClientInterface;
 use PinVandaag\PMarketAPI\Client\Traits\AppApiTrait;
+use PinVandaag\PMarketAPI\Client\Traits\EmmAppApiTrait;
+use PinVandaag\PMarketAPI\Client\Traits\EmmDeviceApiTrait;
+use PinVandaag\PMarketAPI\Client\Traits\EmmDeviceDetailApiTrait;
+use PinVandaag\PMarketAPI\Client\Traits\EmmPolicyApiTrait;
 use PinVandaag\PMarketAPI\Client\Traits\EntityAttributeApiTrait;
 use PinVandaag\PMarketAPI\Client\Traits\FactoryModelApiTrait;
 use PinVandaag\PMarketAPI\Client\Traits\GoInsightApiTrait;
@@ -40,6 +44,10 @@ final class APIClient
 {
     use LoggerAwareTrait;
     use AppApiTrait;
+    use EmmAppApiTrait;
+    use EmmDeviceApiTrait;
+    use EmmDeviceDetailApiTrait;
+    use EmmPolicyApiTrait;
     use EntityAttributeApiTrait;
     use FactoryModelApiTrait;
     use GoInsightApiTrait;

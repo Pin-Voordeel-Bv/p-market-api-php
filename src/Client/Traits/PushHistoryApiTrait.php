@@ -124,17 +124,15 @@ trait PushHistoryApiTrait
 
         if ($pushTime !== null && $pushTime !== '') {
             if ($pushTime instanceof DateTimeInterface) {
-                $query['pushTime'] = (string) ($pushTime->getTimestamp() * 1000);
-            } elseif (is_numeric($pushTime)) {
-                $query['pushTime'] = (string) $pushTime;
+                $query['pushTime'] = $pushTime->format('Y-m-d H:i:s O');
             } else {
                 $timestamp = strtotime((string) $pushTime);
 
                 if ($timestamp === false) {
-                    throw new PMarketAPIException('pushTime must be a valid date/time or millisecond timestamp.');
+                    throw new PMarketAPIException('pushTime must be a valid date/time.');
                 }
 
-                $query['pushTime'] = (string) ($timestamp * 1000);
+                $query['pushTime'] = date('Y-m-d H:i:s O', $timestamp);
             }
         }
 
