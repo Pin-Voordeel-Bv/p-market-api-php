@@ -1193,6 +1193,24 @@ final class PMarketAPIClient
         return $this->apiClient->deleteTerminalGroup($groupId);
     }
 
+    public function searchTerminalsInGroup(
+        int $pageNo = 1,
+        int $pageSize = 10,
+        int|string $groupId = 0,
+        ?string $orderBy = null,
+        ?string $serialNo = null,
+        ?string $merchantNames = null,
+    ): TerminalSearchResult {
+        return $this->apiClient->searchTerminalsInGroup(
+            $pageNo,
+            $pageSize,
+            $groupId,
+            $orderBy,
+            $serialNo,
+            $merchantNames,
+        );
+    }
+
     public function addTerminalToGroup(int|string $groupId, array $terminalIds): bool
     {
         return $this->apiClient->addTerminalToGroup($groupId, $terminalIds);

@@ -8,6 +8,7 @@ use PinVandaag\PMarketAPI\Exception\PMarketAPIException;
 use PinVandaag\PMarketAPI\Model\TerminalGroup;
 use PinVandaag\PMarketAPI\Model\TerminalGroupRequest;
 use PinVandaag\PMarketAPI\Model\TerminalGroupSearchResult;
+use PinVandaag\PMarketAPI\Model\TerminalSearchResult;
 use Psr\Http\Message\ResponseInterface;
 
 trait TerminalGroupApiTrait
@@ -128,6 +129,71 @@ trait TerminalGroupApiTrait
         );
 
         return true;
+    }
+
+    public function searchTerminalsInGroup(
+        int $pageNo,
+        int $pageSize,
+        int|string $groupId,
+        ?string $orderBy = null,
+        ?string $serialNo = null,
+        ?string $merchantNames = null,
+    ): TerminalSearchResult {
+        $this->assertPage(
+            $pageNo,
+            $pageSize,
+        );
+
+        $groupId =
+            $this->assertPositiveInteger(
+                $groupId,
+                'groupId',
+            );
+
+        $query = [
+            'pageNo' => (string) $pageNo,
+            'limit' => (string) $pageSize,
+        ];
+
+        foreach ([
+            'orderBy' => $orderBy,
+            'serialNo' => $serialNo,
+            'merchantNames' => $merchantNames,
+        ] as $key => $value) {
+            if (
+                $value !== null
+                && $value !== ''
+            ) {
+                $query[$key] = $value;
+            }
+        }
+
+        $response = $this->request(
+            method: 'GET',
+            endpoint: sprintf(
+                '/v1/3rdsys/terminalGroups/%s/terminals',
+                rawurlencode(
+                    (string) $groupId,
+                ),
+            ),
+            query: $query,
+            options: [
+                'headers' =>
+                    $this->defaultHeaders(),
+            ],
+            actionDescription: sprintf(
+                'search terminals in P Market terminal group "%s"',
+                $groupId,
+            ),
+        );
+
+        return $this->deserializeTerminalSearchResult(
+            $response,
+            sprintf(
+                'search terminals in P Market terminal group "%s"',
+                $groupId,
+            ),
+        );
     }
 
     public function addTerminalToGroup(int|string $groupId, array $terminalIds): bool
